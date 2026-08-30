@@ -49,7 +49,8 @@ type WriterInstance = {
   }) => void;
 };
 
-const STORAGE_KEY = "mk-hanzi-tree-progress-v1";\nconst LEGACY_STORAGE_SUFFIX = "-hanzi-lab-progress-v1";
+const STORAGE_KEY = "mk-hanzi-tree-progress-v1";
+const LEGACY_STORAGE_SUFFIX = "-hanzi-lab-progress-v1";
 const SESSION_LENGTH = 12;
 const APP_BASE = import.meta.env.BASE_URL.replace(/\/$/, "");
 
