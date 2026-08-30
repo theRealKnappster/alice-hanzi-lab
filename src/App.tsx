@@ -1,0 +1,624 @@
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+  BarChart3,
+  BookOpen,
+  Headphones,
+  Moon,
+  PencilLine,
+  RotateCcw,
+  Sun,
+  Volume2,
+  X,
+} from "lucide-react";
+
+type Pathway = "writing" | "sound" | "meaning";
+
+type StrokeKey = keyof typeof STROKES;
+
+type HanziItem = {
+  character: string;
+  pinyin: string;
+  meaning: string;
+  tone: 1 | 2 | 3 | 4;
+  strokes: StrokeKey[];
+  note: string;
+};
+
+type CharacterProgress = Record<Pathway, number> & {
+  attempts: Record<Pathway, number>;
+  correct: Record<Pathway, number>;
+};
+
+type StoredProgress = {
+  introduced: number;
+  sessions: number;
+  totalPrompts: number;
+  characters: Record<string, CharacterProgress>;
+};
+
+type Prompt = { pathway: Pathway; itemIndex: number };
+
+type WriterInstance = {
+  animateCharacter: (options?: { onComplete?: () => void }) => void;
+  animateStroke: (strokeNum: number, options?: { onComplete?: () => void }) => void;
+  quiz: (options?: {
+    onMistake?: (data: { strokeNum: number }) => void;
+    onCorrectStroke?: (data: { strokeNum: number }) => void;
+    onComplete?: () => void;
+    showHintAfterMisses?: number;
+  }) => void;
+};
+
+const STORAGE_KEY = "mk-hanzi-tree-progress-v1";\nconst LEGACY_STORAGE_SUFFIX = "-hanzi-lab-progress-v1";
+const SESSION_LENGTH = 12;
+const APP_BASE = import.meta.env.BASE_URL.replace(/\/$/, "");
+
+const STROKES = {
+  heng: { mark: "一", hanzi: "横", pinyin: "héng", english: "horizontal", direction: "left to right" },
+  shu: { mark: "丨", hanzi: "竖", pinyin: "shù", english: "vertical", direction: "top to bottom" },
+  pie: { mark: "丿", hanzi: "撇", pinyin: "piě", english: "left-falling", direction: "down and left" },
+  na: { mark: "㇏", hanzi: "捺", pinyin: "nà", english: "right-falling", direction: "down and right" },
+  dian: { mark: "丶", hanzi: "点", pinyin: "diǎn", english: "dot", direction: "a short downward press" },
+  ti: { mark: "㇀", hanzi: "提", pinyin: "tí", english: "rising", direction: "up and right" },
+  heng_zhe: { mark: "㇕", hanzi: "横折", pinyin: "héng zhé", english: "horizontal-turn", direction: "right, then turn down" },
+  shu_gou: { mark: "亅", hanzi: "竖钩", pinyin: "shù gōu", english: "vertical-hook", direction: "down, then hook" },
+  wan_gou: { mark: "㇁", hanzi: "弯钩", pinyin: "wān gōu", english: "curved hook", direction: "curve down, then hook" },
+  pie_dian: { mark: "㇛", hanzi: "撇点", pinyin: "piě diǎn", english: "left-fall–dot", direction: "fall left, then continue right" },
+  heng_pie: { mark: "㇇", hanzi: "横撇", pinyin: "héng piě", english: "horizontal–left-fall", direction: "right, then turn down-left" },
+  heng_gou: { mark: "乛", hanzi: "横钩", pinyin: "héng gōu", english: "horizontal-hook", direction: "right, then hook" },
+  xie_gou: { mark: "㇂", hanzi: "斜钩", pinyin: "xié gōu", english: "slant-hook", direction: "slant down-right, then hook" },
+  heng_zhe_gou: { mark: "㇆", hanzi: "横折钩", pinyin: "héng zhé gōu", english: "horizontal-turn-hook", direction: "right, turn down, then hook" },
+  shu_wan_gou: { mark: "乚", hanzi: "竖弯钩", pinyin: "shù wān gōu", english: "vertical-curve-hook", direction: "down, curve right, then hook" },
+} as const;
+
+const STROKE_BUILDING_BLOCKS = [
+  { mark: "一", hanzi: "横", pinyin: "héng", english: "horizontal", direction: "left to right" },
+  { mark: "丨", hanzi: "竖", pinyin: "shù", english: "vertical", direction: "top to bottom" },
+  { mark: "丿", hanzi: "撇", pinyin: "piě", english: "left-falling", direction: "down and left" },
+  { mark: "㇏", hanzi: "捺", pinyin: "nà", english: "right-falling", direction: "down and right" },
+  { mark: "丶", hanzi: "点", pinyin: "diǎn", english: "dot", direction: "a short downward press" },
+  { mark: "㇀", hanzi: "提", pinyin: "tí", english: "rising", direction: "up and right" },
+  { mark: "㇕", hanzi: "折", pinyin: "zhé", english: "turn", direction: "change direction without lifting" },
+  { mark: "亅", hanzi: "钩", pinyin: "gōu", english: "hook", direction: "a hooked finish" },
+] as const;
+
+const TONES = {
+  1: { mark: "ˉ", name: "first tone", chinese: "阴平 yīnpíng", shape: "high and level", contour: "55", glyph: "→" },
+  2: { mark: "ˊ", name: "second tone", chinese: "阳平 yángpíng", shape: "rising", contour: "35", glyph: "↗" },
+  3: { mark: "ˇ", name: "third tone", chinese: "上声 shǎngshēng", shape: "low, then rising", contour: "214", glyph: "↘↗" },
+  4: { mark: "ˋ", name: "fourth tone", chinese: "去声 qùshēng", shape: "sharp fall", contour: "51", glyph: "↘" },
+} as const;
+
+const NEUTRAL_TONE = { mark: "·", name: "neutral tone", chinese: "轻声 qīngshēng", shape: "light and short", contour: "varies", glyph: "•" } as const;
+
+const HANZI: HanziItem[] = [
+  { character: "一", pinyin: "yī", meaning: "one", tone: 1, strokes: ["heng"], note: "This same horizontal stroke appears at the start of 二 and 三." },
+  { character: "二", pinyin: "èr", meaning: "two", tone: 4, strokes: ["heng", "heng"], note: "Write the shorter top stroke first, then the longer bottom stroke." },
+  { character: "三", pinyin: "sān", meaning: "three", tone: 1, strokes: ["heng", "heng", "heng"], note: "The middle line is shortest. Write all three from top to bottom." },
+  { character: "十", pinyin: "shí", meaning: "ten", tone: 2, strokes: ["heng", "shu"], note: "The horizontal stroke crosses first; the vertical stroke comes second." },
+  { character: "人", pinyin: "rén", meaning: "person", tone: 2, strokes: ["pie", "na"], note: "Its compressed side form, 亻, appears in 你 (you) and 他 (he)." },
+  { character: "大", pinyin: "dà", meaning: "big", tone: 4, strokes: ["heng", "pie", "na"], note: "Compare it with 人 (person): the added horizontal stroke opens the shape." },
+  { character: "小", pinyin: "xiǎo", meaning: "small", tone: 3, strokes: ["shu_gou", "pie", "dian"], note: "Write the center hook first, followed by the two smaller side strokes." },
+  { character: "中", pinyin: "zhōng", meaning: "middle", tone: 1, strokes: ["shu", "heng_zhe", "heng", "shu"], note: "The vertical stroke passes through 口 (mouth), creating 中 (middle)." },
+  { character: "国", pinyin: "guó", meaning: "country", tone: 2, strokes: ["shu", "heng_zhe", "heng", "heng", "shu", "heng", "dian", "heng"], note: "The enclosure 囗 surrounds 玉. Close the bottom of the enclosure last." },
+  { character: "女", pinyin: "nǚ", meaning: "woman", tone: 3, strokes: ["pie_dian", "pie", "heng"], note: "女 becomes the left-side component of 好 (good)." },
+  { character: "子", pinyin: "zǐ", meaning: "child", tone: 3, strokes: ["heng_pie", "wan_gou", "heng"], note: "子 appears on the right side of 好 (good)." },
+  { character: "好", pinyin: "hǎo", meaning: "good", tone: 3, strokes: ["pie_dian", "pie", "ti", "heng_pie", "wan_gou", "heng"], note: "好 is built from 女 (woman) on the left and 子 (child) on the right." },
+  { character: "我", pinyin: "wǒ", meaning: "I / me", tone: 3, strokes: ["pie", "heng", "shu_gou", "ti", "xie_gou", "pie", "dian"], note: "A high-frequency character worth writing often." },
+  { character: "你", pinyin: "nǐ", meaning: "you", tone: 3, strokes: ["pie", "shu", "pie", "heng_gou", "shu_gou", "pie", "dian"], note: "Person-side 亻 plus 尔." },
+  { character: "他", pinyin: "tā", meaning: "he / him", tone: 1, strokes: ["pie", "shu", "heng_zhe_gou", "shu", "shu_wan_gou"], note: "Person-side 亻 plus 也." },
+];
+
+const firstSession: Prompt[] = [
+  { pathway: "writing", itemIndex: 0 },
+  { pathway: "writing", itemIndex: 1 },
+  { pathway: "sound", itemIndex: 0 },
+  { pathway: "writing", itemIndex: 2 },
+  { pathway: "meaning", itemIndex: 1 },
+  { pathway: "sound", itemIndex: 2 },
+  { pathway: "writing", itemIndex: 3 },
+  { pathway: "meaning", itemIndex: 0 },
+  { pathway: "writing", itemIndex: 4 },
+  { pathway: "sound", itemIndex: 3 },
+  { pathway: "meaning", itemIndex: 4 },
+  { pathway: "writing", itemIndex: 0 },
+];
+
+function emptyCharacterProgress(): CharacterProgress {
+  return {
+    writing: 0,
+    sound: 0,
+    meaning: 0,
+    attempts: { writing: 0, sound: 0, meaning: 0 },
+    correct: { writing: 0, sound: 0, meaning: 0 },
+  };
+}
+
+function emptyProgress(): StoredProgress {
+  return { introduced: 0, sessions: 0, totalPrompts: 0, characters: {} };
+}
+
+function loadProgress(): StoredProgress {
+  try {
+    let raw = window.localStorage.getItem(STORAGE_KEY);
+    if (!raw) {
+      const legacyKey = Object.keys(window.localStorage).find((key) => key.endsWith(LEGACY_STORAGE_SUFFIX));
+      if (legacyKey) {
+        raw = window.localStorage.getItem(legacyKey);
+        if (raw) window.localStorage.setItem(STORAGE_KEY, raw);
+        window.localStorage.removeItem(legacyKey);
+      }
+    }
+    return raw ? (JSON.parse(raw) as StoredProgress) : emptyProgress();
+  } catch {
+    return emptyProgress();
+  }
+}
+
+function seededOptions<T>(correct: T, pool: T[], seed: number): T[] {
+  const alternatives = pool.filter((value) => value !== correct);
+  const distinct = [
+    correct,
+    alternatives[seed % alternatives.length],
+    alternatives[(seed * 3 + 1) % alternatives.length],
+  ].filter((value, index, values) => value !== undefined && values.indexOf(value) === index);
+  for (const value of alternatives) {
+    if (distinct.length === 3) break;
+    if (!distinct.includes(value)) distinct.push(value);
+  }
+  const shift = seed % distinct.length;
+  return [...distinct.slice(shift), ...distinct.slice(0, shift)];
+}
+
+function buildAdaptiveSession(progress: StoredProgress): Prompt[] {
+  const currentIntroduced = Math.max(progress.introduced, 5);
+  const introduceThrough = Math.min(HANZI.length, currentIntroduced + 2);
+  const prompts: Prompt[] = [];
+
+  for (let index = currentIntroduced; index < introduceThrough; index += 1) {
+    prompts.push({ pathway: "writing", itemIndex: index });
+  }
+
+  const candidates: Array<Prompt & { score: number; tie: number }> = [];
+  for (let itemIndex = 0; itemIndex < introduceThrough; itemIndex += 1) {
+    const record = progress.characters[HANZI[itemIndex].character] ?? emptyCharacterProgress();
+    (["writing", "sound", "meaning"] as Pathway[]).forEach((pathway, offset) => {
+      candidates.push({
+        pathway,
+        itemIndex,
+        score: record[pathway],
+        tie: ((itemIndex + 1) * 7 + offset * 3 + progress.sessions) % 17,
+      });
+    });
+  }
+  candidates.sort((a, b) => a.score - b.score || a.tie - b.tie);
+  for (const candidate of candidates) {
+    if (prompts.length >= SESSION_LENGTH) break;
+    prompts.push({ pathway: candidate.pathway, itemIndex: candidate.itemIndex });
+  }
+  return prompts;
+}
+
+function pathwayLabel(pathway: Pathway) {
+  if (pathway === "writing") return "Wield the brush";
+  if (pathway === "sound") return "Hear the spell";
+  return "Spot the meaning";
+}
+
+function pathwayIcon(pathway: Pathway) {
+  if (pathway === "writing") return <PencilLine aria-hidden="true" />;
+  if (pathway === "sound") return <Headphones aria-hidden="true" />;
+  return <span className="meaning-icon" aria-hidden="true">意</span>;
+}
+
+export default function Home() {
+  const [progress, setProgress] = useState<StoredProgress | null>(null);
+  const [started, setStarted] = useState(false);
+  const [session, setSession] = useState<Prompt[]>([]);
+  const [step, setStep] = useState(0);
+  const [feedback, setFeedback] = useState<"correct" | "retry" | null>(null);
+  const [showProgress, setShowProgress] = useState(false);
+  const [showGuide, setShowGuide] = useState(false);
+  const [dark, setDark] = useState(false);
+  const [writerPhase, setWriterPhase] = useState<"watching" | "writing">("watching");
+  const [writerReplay, setWriterReplay] = useState(0);
+  const [currentStrokeIndex, setCurrentStrokeIndex] = useState(0);
+  const writerTarget = useRef<HTMLDivElement>(null);
+  const mistakeCount = useRef(0);
+
+  useEffect(() => {
+    setProgress(loadProgress());
+    setDark(window.matchMedia("(prefers-color-scheme: dark)").matches);
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register(`${APP_BASE}/sw.js`).catch(() => undefined);
+    }
+  }, []);
+
+  useEffect(() => {
+    document.documentElement.dataset.theme = dark ? "dark" : "light";
+  }, [dark]);
+
+  useEffect(() => {
+    if (progress) window.localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
+  }, [progress]);
+
+  const current = session[step];
+  const item = current ? HANZI[current.itemIndex] : null;
+  const tone = item ? TONES[item.tone] : null;
+  const currentStroke = item ? STROKES[item.strokes[currentStrokeIndex]] : null;
+  const introducedCount = Math.max(progress?.introduced ?? 0, progress?.sessions ? 5 : 0);
+  const optionPool = HANZI.slice(0, Math.max(5, introducedCount));
+
+  const options = useMemo(() => {
+    if (!current || !item) return [];
+    if (current.pathway === "sound") {
+      return seededOptions(item.character, optionPool.map((entry) => entry.character), current.itemIndex + step);
+    }
+    return seededOptions(item.meaning, optionPool.map((entry) => entry.meaning), current.itemIndex + step);
+  }, [current, item, optionPool, step]);
+
+  const recordResult = useCallback((correct: boolean, mistakes = 0) => {
+    if (!current || !item) return;
+    setProgress((previous) => {
+      if (!previous) return previous;
+      const next = structuredClone(previous);
+      const record = next.characters[item.character] ?? emptyCharacterProgress();
+      record.attempts[current.pathway] += 1;
+      if (correct) record.correct[current.pathway] += 1;
+      const clean = correct && mistakes === 0;
+      record[current.pathway] = Math.max(
+        0,
+        Math.min(3, record[current.pathway] + (clean ? 1 : mistakes > 2 ? -1 : 0)),
+      );
+      next.characters[item.character] = record;
+      next.introduced = Math.max(next.introduced, current.itemIndex + 1);
+      next.totalPrompts += 1;
+      return next;
+    });
+  }, [current, item]);
+
+  const advance = useCallback(() => {
+    setFeedback(null);
+    mistakeCount.current = 0;
+    setWriterPhase("watching");
+    setCurrentStrokeIndex(0);
+    if (step + 1 >= session.length) {
+      setProgress((previous) => previous ? { ...previous, sessions: previous.sessions + 1 } : previous);
+      setStep(session.length);
+    } else {
+      setStep((value) => value + 1);
+    }
+  }, [session.length, step]);
+
+  const respond = (selected: string) => {
+    if (!item || !current || feedback) return;
+    const answer = current.pathway === "sound" ? item.character : item.meaning;
+    const correct = selected === answer;
+    recordResult(correct);
+    setFeedback(correct ? "correct" : "retry");
+  };
+
+  const speak = useCallback(() => {
+    if (!item || !("speechSynthesis" in window)) return;
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(item.character);
+    const voices = window.speechSynthesis.getVoices();
+    utterance.voice =
+      voices.find((voice) => voice.lang.toLowerCase() === "zh-cn") ??
+      voices.find((voice) => voice.lang.toLowerCase().startsWith("zh")) ??
+      null;
+    utterance.lang = "zh-CN";
+    utterance.rate = 0.72;
+    window.speechSynthesis.speak(utterance);
+  }, [item]);
+
+  useEffect(() => {
+    if (!started || !item) return;
+    const timer = window.setTimeout(speak, 280);
+    return () => window.clearTimeout(timer);
+  }, [item, speak, started, step]);
+
+  useEffect(() => {
+    if (!feedback) return;
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Enter") advance();
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [advance, feedback]);
+
+  useEffect(() => {
+    if (!item || current?.pathway !== "writing" || !writerTarget.current) return;
+    let cancelled = false;
+    let betweenStrokesTimer: number | undefined;
+    writerTarget.current.innerHTML = "";
+    mistakeCount.current = 0;
+    setCurrentStrokeIndex(0);
+    import("hanzi-writer").then(({ default: HanziWriter }) => {
+      if (cancelled || !writerTarget.current) return;
+      const instance = HanziWriter.create(writerTarget.current, item.character, {
+        width: 284,
+        height: 284,
+        padding: 18,
+        showOutline: true,
+        showCharacter: false,
+        strokeColor: dark ? "#f4efe8" : "#221f1c",
+        outlineColor: dark ? "#403c37" : "#ded8cf",
+        highlightColor: "#c85b44",
+        radicalColor: "#5f7d70",
+        drawingWidth: 8,
+        strokeAnimationSpeed: 0.55,
+        delayBetweenStrokes: 650,
+      }) as WriterInstance;
+      const beginQuiz = () => {
+        if (cancelled) return;
+        setWriterPhase("writing");
+        setCurrentStrokeIndex(0);
+        instance.quiz({
+          showHintAfterMisses: 2,
+          onMistake: ({ strokeNum }) => {
+            mistakeCount.current += 1;
+            setCurrentStrokeIndex(strokeNum);
+          },
+          onCorrectStroke: ({ strokeNum }) => {
+            setCurrentStrokeIndex(Math.min(strokeNum + 1, item.strokes.length - 1));
+          },
+          onComplete: () => {
+            const mistakes = mistakeCount.current;
+            recordResult(true, mistakes);
+            setFeedback(mistakes === 0 ? "correct" : "retry");
+          },
+        });
+      };
+      const animateStroke = (strokeNum: number) => {
+        if (cancelled) return;
+        if (strokeNum >= item.strokes.length) {
+          betweenStrokesTimer = window.setTimeout(beginQuiz, 550);
+          return;
+        }
+        setCurrentStrokeIndex(strokeNum);
+        instance.animateStroke(strokeNum, {
+          onComplete: () => {
+            betweenStrokesTimer = window.setTimeout(() => animateStroke(strokeNum + 1), 650);
+          },
+        });
+      };
+      animateStroke(0);
+    });
+    return () => {
+      cancelled = true;
+      if (betweenStrokesTimer !== undefined) window.clearTimeout(betweenStrokesTimer);
+    };
+  }, [current, dark, item, recordResult, writerReplay]);
+
+  const begin = () => {
+    if (!progress) return;
+    setSession(progress.sessions === 0 ? firstSession : buildAdaptiveSession(progress));
+    setStep(0);
+    setStarted(true);
+    setShowProgress(false);
+    setShowGuide(false);
+    setFeedback(null);
+  };
+
+  const reset = () => {
+    const clean = emptyProgress();
+    setProgress(clean);
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(clean));
+    setShowProgress(false);
+    setStarted(false);
+  };
+
+  if (!progress) return <main className="loading-shell" aria-label="Loading" />;
+
+  const completed = started && step >= session.length;
+  const choiceFeedback = feedback && current?.pathway !== "writing";
+  const pathwayAverages = (["writing", "sound", "meaning"] as Pathway[]).map((pathway) => {
+    const values = HANZI.slice(0, progress.introduced).map(
+      (entry) => progress.characters[entry.character]?.[pathway] ?? 0,
+    );
+    return {
+      pathway,
+      percent: values.length
+        ? Math.round((values.reduce((sum, value) => sum + value, 0) / (values.length * 3)) * 100)
+        : 0,
+    };
+  });
+
+  return (
+    <main className="app-shell">
+      <header className="topbar">
+        <button className="brand" onClick={() => { setStarted(false); setShowProgress(false); setShowGuide(false); }} aria-label="Home">
+          <span className="brand-mark"><img src={`${APP_BASE}/monkey-king-icon.png`} alt="" /></span><span>Hanzi Tree</span>
+        </button>
+        <div className="top-actions">
+          <button className="icon-button" onClick={() => { setShowGuide(true); setShowProgress(false); }} aria-label="Stroke and tone guide"><BookOpen /></button>
+          <button className="icon-button" onClick={() => { setShowProgress(true); setShowGuide(false); }} aria-label="View progress"><BarChart3 /></button>
+          <button className="icon-button" onClick={() => setDark((value) => !value)} aria-label={dark ? "Use light mode" : "Use dark mode"}>
+            {dark ? <Sun /> : <Moon />}
+          </button>
+        </div>
+      </header>
+
+      {showGuide ? (
+        <section className="guide-view" aria-labelledby="guide-title">
+          <button className="close-button" onClick={() => setShowGuide(false)} aria-label="Close guide"><X /></button>
+          <p className="eyebrow">The sacred scrolls</p>
+          <h1 id="guide-title">The Monkey King had 72 transformations.<br />Start with strokes and tones.</h1>
+
+          <section className="guide-section" aria-labelledby="stroke-guide-title">
+            <div className="guide-heading">
+              <div><span>Brush moves</span><h2 id="stroke-guide-title">Know your strokes</h2></div>
+              <p>Five basic directions combine with rises, turns, and hooks. 横折 is one stroke, because even the Great Sage must obey brush rules.</p>
+            </div>
+            <div className="stroke-guide-grid">
+              {STROKE_BUILDING_BLOCKS.map((stroke) => (
+                <div className="stroke-guide-card" key={stroke.hanzi}>
+                  <span className="stroke-mark">{stroke.mark}</span>
+                  <div><strong>{stroke.hanzi} <em>{stroke.pinyin}</em></strong><span>{stroke.english} · {stroke.direction}</span></div>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          <section className="guide-section" aria-labelledby="tone-guide-title">
+            <div className="guide-heading">
+              <div><span>Cloud calls</span><h2 id="tone-guide-title">Know your tones</h2></div>
+              <p>Pitch changes meaning. Miss the tone and your magic cloud may carry you to the wrong mountain.</p>
+            </div>
+            <div className="tone-guide-list">
+              {[...Object.values(TONES), NEUTRAL_TONE].map((toneItem) => (
+                <div className="tone-guide-row" key={toneItem.name}>
+                  <span className="tone-glyph">{toneItem.glyph}</span>
+                  <div><strong>{toneItem.name}</strong><span>{toneItem.chinese}</span></div>
+                  <div><strong>{toneItem.shape}</strong><span>pitch {toneItem.contour}</span></div>
+                </div>
+              ))}
+            </div>
+          </section>
+        </section>
+      ) : showProgress ? (
+        <section className="progress-view" aria-labelledby="progress-title">
+          <button className="close-button" onClick={() => setShowProgress(false)} aria-label="Close progress"><X /></button>
+          <p className="eyebrow">Journey log</p>
+          <h1 id="progress-title">Even immortals keep score.</h1>
+          <div className="progress-summary">
+            <div><strong>{progress.introduced}</strong><span>characters challenged</span></div>
+            <div><strong>{progress.sessions}</strong><span>chapters crossed</span></div>
+            <div><strong>{progress.totalPrompts}</strong><span>brush battles</span></div>
+          </div>
+          <div className="pathway-bars">
+            {pathwayAverages.map(({ pathway, percent }) => (
+              <div className="pathway-row" key={pathway}>
+                <div className="pathway-label">{pathwayIcon(pathway)}<span>{pathwayLabel(pathway)}</span></div>
+                <div className="bar-track"><span style={{ width: `${percent}%` }} /></div>
+                <span className="bar-value">{percent}%</span>
+              </div>
+            ))}
+          </div>
+          <div className="character-grid">
+            {HANZI.map((entry, index) => {
+              const score = progress.characters[entry.character];
+              const strength = score ? Math.round(((score.writing + score.sound + score.meaning) / 9) * 100) : 0;
+              return (
+                <div className={`character-tile ${index >= progress.introduced ? "locked" : ""}`} key={entry.character}>
+                  <span>{index < progress.introduced ? entry.character : "·"}</span>
+                  <small>{index < progress.introduced ? `${strength}%` : "later"}</small>
+                </div>
+              );
+            })}
+          </div>
+          <button className="text-button" onClick={reset}><RotateCcw /> Erase the scrolls</button>
+        </section>
+      ) : !started ? (
+        <section className="welcome-view">
+          <div className="welcome-character"><img src={`${APP_BASE}/monkey-king-logo.png`} alt="The Monkey King writing the character 字 with a calligraphy brush" /></div>
+          <p className="eyebrow">Training at Flower Fruit Mountain</p>
+          <h1>See the character.<br />Wield the brush.</h1>
+          <p className="welcome-copy">The Monkey King mastered 72 transformations. You only need one character at a time.</p>
+          <button className="primary-button" onClick={begin}>{progress.sessions ? "Return to the road" : "Begin the journey"}</button>
+          <p className="session-note">12 challenges · no heavenly bureaucracy</p>
+          <button className="foundation-link" onClick={() => setShowGuide(true)}><BookOpen /> Open the sacred scrolls</button>
+        </section>
+      ) : completed ? (
+        <section className="complete-view">
+          <div className="completion-ring"><img src={`${APP_BASE}/monkey-king-icon.png`} alt="" /></div>
+          <p className="eyebrow">Chapter complete</p>
+          <h1>The sutras can wait.</h1>
+          <p>Even the Great Sage puts down the brush eventually.</p>
+          <button className="primary-button" onClick={begin}>Cause more trouble</button>
+          <button className="secondary-button" onClick={() => setShowProgress(true)}>Read the journey log</button>
+        </section>
+      ) : item && current ? (
+        <section className="practice-view">
+          <div className="session-progress" aria-label={`Prompt ${step + 1} of ${session.length}`}><span style={{ width: `${((step + 1) / session.length) * 100}%` }} /></div>
+          <div className="prompt-heading">
+            <span className={`pathway-badge ${current.pathway}`}>{pathwayIcon(current.pathway)} {pathwayLabel(current.pathway)}</span>
+            <span className="step-count">{step + 1} / {session.length}</span>
+          </div>
+
+          {current.pathway === "writing" ? (
+            <div className="writing-prompt">
+              <div className="character-meta">
+                <span className="pinyin">{item.pinyin}</span>
+                {tone && <span className="tone-chip"><strong>{tone.name}</strong> · {tone.shape}</span>}
+                <span className="meaning">{item.meaning}</span>
+                <button className="pronunciation-button" onClick={speak} aria-label={`Hear ${item.character} again`}><Volume2 /></button>
+              </div>
+              <div className="writing-workspace">
+                <div className="stroke-sidebar">
+                  {currentStroke && (
+                    <div className="current-stroke" aria-live="polite">
+                      <span>Stroke {currentStrokeIndex + 1} of {item.strokes.length}</span>
+                      <strong>{currentStroke.mark} {currentStroke.hanzi} <em>{currentStroke.pinyin}</em></strong>
+                      <small>{currentStroke.english} · {currentStroke.direction}</small>
+                    </div>
+                  )}
+                  <div className="stroke-sequence" aria-label="Stroke sequence">
+                    {item.strokes.map((strokeKey, index) => {
+                      const stroke = STROKES[strokeKey];
+                      return <span className={index === currentStrokeIndex && !feedback ? "active" : ""} key={`${strokeKey}-${index}`}>{index + 1}. {stroke.hanzi}</span>;
+                    })}
+                  </div>
+                  <p className="instruction">{writerPhase === "watching" ? "Watch the brush. Name the move." : "Your turn. Wield the Pencil."}</p>
+                  {writerPhase === "writing" && !feedback && (
+                    <button className="replay-button" onClick={() => { setWriterPhase("watching"); setWriterReplay((value) => value + 1); }}>
+                      <RotateCcw /> Monkey see, monkey replay
+                    </button>
+                  )}
+                </div>
+                <div className="writer-frame"><div className="guide-lines" aria-hidden="true" /><div ref={writerTarget} className="writer-target" aria-label={`Write ${item.character}`} /></div>
+                <div className={`insight-column ${feedback ? "has-feedback" : ""}`}>
+                  <aside className="learning-note">
+                    <span>Monkey sees</span>
+                    <p>{item.note}</p>
+                  </aside>
+                  {feedback && (
+                    <div className={`answer-panel writing-result ${feedback}`} role="status">
+                      <div>
+                        <strong>{feedback === "correct" ? "Great Sage!" : "A little help from Guanyin."}</strong>
+                        <span>{item.pinyin} · {TONES[item.tone].name}, {TONES[item.tone].shape} · {item.meaning}</span>
+                      </div>
+                      <button onClick={advance}>Onward west</button>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          ) : current.pathway === "sound" ? (
+            <div className="choice-prompt">
+              <p className="question">Which character do you hear?</p>
+              <button className="sound-button" onClick={speak} aria-label="Play sound"><Volume2 /><span>Hear the spell</span></button>
+              <div className="choice-grid characters">
+                {options.map((option) => <button key={option} onClick={() => respond(option)} disabled={feedback !== null}>{option}</button>)}
+              </div>
+            </div>
+          ) : (
+            <div className="choice-prompt">
+              <div className="display-character">{item.character}</div>
+              <div className="meaning-pronunciation">
+                <span className="pinyin">{item.pinyin}</span>
+                {tone && <span className="tone-chip"><strong>{tone.name}</strong> · {tone.shape}</span>}
+                <button className="pronunciation-button meaning-sound" onClick={speak} aria-label={`Hear ${item.character} again`}><Volume2 /><span>Hear again</span></button>
+              </div>
+              <p className="question">What power does this character hold?</p>
+              <div className="choice-grid meanings">
+                {options.map((option) => <button key={option} onClick={() => respond(option)} disabled={feedback !== null}>{option}</button>)}
+              </div>
+            </div>
+          )}
+
+          {choiceFeedback && (
+            <div className={`answer-panel ${feedback}`} role="status">
+              <div>
+                <strong>{feedback === "correct" ? "Great Sage!" : current.pathway === "writing" ? "A little help from Guanyin." : `${item.character} is ${item.meaning}.`}</strong>
+                <span>{item.pinyin} · {TONES[item.tone].name}, {TONES[item.tone].shape} · {item.meaning}</span>
+              </div>
+              <button onClick={advance}>Onward west</button>
+            </div>
+          )}
+        </section>
+      ) : null}
+    </main>
+  );
+}

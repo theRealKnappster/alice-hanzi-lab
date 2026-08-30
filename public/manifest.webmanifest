@@ -1,0 +1,14 @@
+{
+  "name": "Monkey King's Hanzi Tree",
+  "short_name": "Hanzi Tree",
+  "description": "Chinese character training with the Monkey King, a brush, and a little trouble.",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f6f2eb",
+  "theme_color": "#f6f2eb",
+  "orientation": "any",
+  "icons": [
+    { "src": "./icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "./icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
