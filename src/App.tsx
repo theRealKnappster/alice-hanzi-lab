@@ -10,19 +10,34 @@ import {
   Volume2,
   X,
 } from "lucide-react";
+import hsk1WordsData from "./data/hsk1.json";
 
 type Pathway = "writing" | "sound" | "meaning";
 
 type StrokeKey = keyof typeof STROKES;
 
+type Tone = 1 | 2 | 3 | 4 | 5;
+
+type HskWord = {
+  word: string;
+  syllables: string[];
+  tones: Tone[];
+  meaning: string;
+};
+
 type HanziItem = {
   character: string;
   pinyin: string;
   meaning: string;
-  tone: 1 | 2 | 3 | 4;
-  strokes: StrokeKey[];
+  tone: Tone;
+  strokes?: StrokeKey[];
   note: string;
+  contextWord: string;
+  contextPinyin: string;
+  contextMeaning: string;
 };
+
+type CoreHanziItem = Omit<HanziItem, "contextWord" | "contextPinyin" | "contextMeaning">;
 
 type CharacterProgress = Record<Pathway, number> & {
   attempts: Record<Pathway, number>;
@@ -47,6 +62,12 @@ type WriterInstance = {
     onComplete?: () => void;
     showHintAfterMisses?: number;
   }) => void;
+};
+
+type CharacterJson = {
+  strokes: string[];
+  medians: number[][][];
+  radStrokes?: number[];
 };
 
 const STORAGE_KEY = "mk-hanzi-tree-progress-v1";
@@ -88,11 +109,10 @@ const TONES = {
   2: { mark: "ˊ", name: "second tone", chinese: "阳平 yángpíng", shape: "rising", contour: "35", glyph: "↗" },
   3: { mark: "ˇ", name: "third tone", chinese: "上声 shǎngshēng", shape: "low, then rising", contour: "214", glyph: "↘↗" },
   4: { mark: "ˋ", name: "fourth tone", chinese: "去声 qùshēng", shape: "sharp fall", contour: "51", glyph: "↘" },
+  5: { mark: "·", name: "neutral tone", chinese: "轻声 qīngshēng", shape: "light and short", contour: "varies", glyph: "•" },
 } as const;
 
-const NEUTRAL_TONE = { mark: "·", name: "neutral tone", chinese: "轻声 qīngshēng", shape: "light and short", contour: "varies", glyph: "•" } as const;
-
-const HANZI: HanziItem[] = [
+const CORE_HANZI: CoreHanziItem[] = [
   { character: "一", pinyin: "yī", meaning: "one", tone: 1, strokes: ["heng"], note: "This same horizontal stroke appears at the start of 二 and 三." },
   { character: "二", pinyin: "èr", meaning: "two", tone: 4, strokes: ["heng", "heng"], note: "Write the shorter top stroke first, then the longer bottom stroke." },
   { character: "三", pinyin: "sān", meaning: "three", tone: 1, strokes: ["heng", "heng", "heng"], note: "The middle line is shortest. Write all three from top to bottom." },
@@ -108,6 +128,40 @@ const HANZI: HanziItem[] = [
   { character: "我", pinyin: "wǒ", meaning: "I / me", tone: 3, strokes: ["pie", "heng", "shu_gou", "ti", "xie_gou", "pie", "dian"], note: "A high-frequency character worth writing often." },
   { character: "你", pinyin: "nǐ", meaning: "you", tone: 3, strokes: ["pie", "shu", "pie", "heng_gou", "shu_gou", "pie", "dian"], note: "Person-side 亻 plus 尔." },
   { character: "他", pinyin: "tā", meaning: "he / him", tone: 1, strokes: ["pie", "shu", "heng_zhe_gou", "shu", "shu_wan_gou"], note: "Person-side 亻 plus 也." },
+];
+
+const HSK1_WORDS = hsk1WordsData as HskWord[];
+const coreCharacters = new Set(CORE_HANZI.map((item) => item.character));
+const expandedHanzi: HanziItem[] = [];
+const expandedCharacters = new Set<string>();
+
+for (const word of HSK1_WORDS) {
+  [...word.word].forEach((character, characterIndex) => {
+    if (coreCharacters.has(character) || expandedCharacters.has(character)) return;
+    expandedCharacters.add(character);
+    expandedHanzi.push({
+      character,
+      pinyin: word.syllables[characterIndex].toLowerCase(),
+      meaning: word.meaning,
+      tone: word.tones[characterIndex],
+      note: word.word === character
+        ? `${character} is an HSK 1 word meaning “${word.meaning}.”`
+        : `${character} appears in ${word.word} (${word.syllables.join(" ")}), meaning “${word.meaning}.”`,
+      contextWord: word.word,
+      contextPinyin: word.syllables.join(" "),
+      contextMeaning: word.meaning,
+    });
+  });
+}
+
+const HANZI: HanziItem[] = [
+  ...CORE_HANZI.map((item) => ({
+    ...item,
+    contextWord: item.character,
+    contextPinyin: item.pinyin,
+    contextMeaning: item.meaning,
+  })),
+  ...expandedHanzi,
 ];
 
 const firstSession: Prompt[] = [
@@ -224,6 +278,7 @@ export default function Home() {
   const [writerPhase, setWriterPhase] = useState<"watching" | "writing">("watching");
   const [writerReplay, setWriterReplay] = useState(0);
   const [currentStrokeIndex, setCurrentStrokeIndex] = useState(0);
+  const [currentStrokeCount, setCurrentStrokeCount] = useState(0);
   const writerTarget = useRef<HTMLDivElement>(null);
   const mistakeCount = useRef(0);
 
@@ -246,16 +301,17 @@ export default function Home() {
   const current = session[step];
   const item = current ? HANZI[current.itemIndex] : null;
   const tone = item ? TONES[item.tone] : null;
-  const currentStroke = item ? STROKES[item.strokes[currentStrokeIndex]] : null;
+  const currentStroke = item?.strokes ? STROKES[item.strokes[currentStrokeIndex]] : null;
+  const strokeCount = item?.strokes?.length ?? currentStrokeCount;
   const introducedCount = Math.max(progress?.introduced ?? 0, progress?.sessions ? 5 : 0);
   const optionPool = HANZI.slice(0, Math.max(5, introducedCount));
 
   const options = useMemo(() => {
     if (!current || !item) return [];
     if (current.pathway === "sound") {
-      return seededOptions(item.character, optionPool.map((entry) => entry.character), current.itemIndex + step);
+      return seededOptions(item.contextWord, optionPool.map((entry) => entry.contextWord), current.itemIndex + step);
     }
-    return seededOptions(item.meaning, optionPool.map((entry) => entry.meaning), current.itemIndex + step);
+    return seededOptions(item.contextMeaning, optionPool.map((entry) => entry.contextMeaning), current.itemIndex + step);
   }, [current, item, optionPool, step]);
 
   const recordResult = useCallback((correct: boolean, mistakes = 0) => {
@@ -293,7 +349,7 @@ export default function Home() {
 
   const respond = (selected: string) => {
     if (!item || !current || feedback) return;
-    const answer = current.pathway === "sound" ? item.character : item.meaning;
+    const answer = current.pathway === "sound" ? item.contextWord : item.contextMeaning;
     const correct = selected === answer;
     recordResult(correct);
     setFeedback(correct ? "correct" : "retry");
@@ -302,7 +358,7 @@ export default function Home() {
   const speak = useCallback(() => {
     if (!item || !("speechSynthesis" in window)) return;
     window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(item.character);
+    const utterance = new SpeechSynthesisUtterance(current?.pathway === "writing" ? item.character : item.contextWord);
     const voices = window.speechSynthesis.getVoices();
     utterance.voice =
       voices.find((voice) => voice.lang.toLowerCase() === "zh-cn") ??
@@ -311,7 +367,7 @@ export default function Home() {
     utterance.lang = "zh-CN";
     utterance.rate = 0.72;
     window.speechSynthesis.speak(utterance);
-  }, [item]);
+  }, [current?.pathway, item]);
 
   useEffect(() => {
     if (!started || !item) return;
@@ -335,8 +391,12 @@ export default function Home() {
     writerTarget.current.innerHTML = "";
     mistakeCount.current = 0;
     setCurrentStrokeIndex(0);
-    import("hanzi-writer").then(({ default: HanziWriter }) => {
-      if (cancelled || !writerTarget.current) return;
+    setCurrentStrokeCount(item.strokes?.length ?? 0);
+    import("hanzi-writer").then(async ({ default: HanziWriter }) => {
+      const characterData = await HanziWriter.loadCharacterData(item.character) as CharacterJson | void;
+      if (cancelled || !writerTarget.current || !characterData) return;
+      const totalStrokes = characterData.strokes.length;
+      setCurrentStrokeCount(totalStrokes);
       const instance = HanziWriter.create(writerTarget.current, item.character, {
         width: 284,
         height: 284,
@@ -350,6 +410,10 @@ export default function Home() {
         drawingWidth: 8,
         strokeAnimationSpeed: 0.55,
         delayBetweenStrokes: 650,
+        charDataLoader: (_character, onLoad) => {
+          onLoad(characterData);
+          return characterData;
+        },
       }) as WriterInstance;
       const beginQuiz = () => {
         if (cancelled) return;
@@ -362,7 +426,7 @@ export default function Home() {
             setCurrentStrokeIndex(strokeNum);
           },
           onCorrectStroke: ({ strokeNum }) => {
-            setCurrentStrokeIndex(Math.min(strokeNum + 1, item.strokes.length - 1));
+            setCurrentStrokeIndex(Math.min(strokeNum + 1, totalStrokes - 1));
           },
           onComplete: () => {
             const mistakes = mistakeCount.current;
@@ -373,7 +437,7 @@ export default function Home() {
       };
       const animateStroke = (strokeNum: number) => {
         if (cancelled) return;
-        if (strokeNum >= item.strokes.length) {
+        if (strokeNum >= totalStrokes) {
           betweenStrokesTimer = window.setTimeout(beginQuiz, 550);
           return;
         }
@@ -385,7 +449,7 @@ export default function Home() {
         });
       };
       animateStroke(0);
-    });
+    }).catch(() => setWriterPhase("writing"));
     return () => {
       cancelled = true;
       if (betweenStrokesTimer !== undefined) window.clearTimeout(betweenStrokesTimer);
@@ -468,7 +532,7 @@ export default function Home() {
               <p>Pitch changes meaning. Miss the tone and your magic cloud may carry you to the wrong mountain.</p>
             </div>
             <div className="tone-guide-list">
-              {[...Object.values(TONES), NEUTRAL_TONE].map((toneItem) => (
+              {Object.values(TONES).map((toneItem) => (
                 <div className="tone-guide-row" key={toneItem.name}>
                   <span className="tone-glyph">{toneItem.glyph}</span>
                   <div><strong>{toneItem.name}</strong><span>{toneItem.chinese}</span></div>
@@ -543,25 +607,33 @@ export default function Home() {
               <div className="character-meta">
                 <span className="pinyin">{item.pinyin}</span>
                 {tone && <span className="tone-chip"><strong>{tone.name}</strong> · {tone.shape}</span>}
-                <span className="meaning">{item.meaning}</span>
+                <span className="meaning">{item.contextWord === item.character ? item.meaning : `in ${item.contextWord} · ${item.contextMeaning}`}</span>
                 <button className="pronunciation-button" onClick={speak} aria-label={`Hear ${item.character} again`}><Volume2 /></button>
               </div>
               <div className="writing-workspace">
                 <div className="stroke-sidebar">
                   {currentStroke && (
                     <div className="current-stroke" aria-live="polite">
-                      <span>Stroke {currentStrokeIndex + 1} of {item.strokes.length}</span>
+                      <span>Stroke {currentStrokeIndex + 1} of {strokeCount}</span>
                       <strong>{currentStroke.mark} {currentStroke.hanzi} <em>{currentStroke.pinyin}</em></strong>
                       <small>{currentStroke.english} · {currentStroke.direction}</small>
                     </div>
                   )}
+                  {!currentStroke && strokeCount > 0 && (
+                    <div className="current-stroke generic-stroke" aria-live="polite">
+                      <span>Stroke {currentStrokeIndex + 1} of {strokeCount}</span>
+                      <strong>Follow the highlighted path</strong>
+                      <small>Direction and order are checked as you write.</small>
+                    </div>
+                  )}
                   <div className="stroke-sequence" aria-label="Stroke sequence">
-                    {item.strokes.map((strokeKey, index) => {
-                      const stroke = STROKES[strokeKey];
-                      return <span className={index === currentStrokeIndex && !feedback ? "active" : ""} key={`${strokeKey}-${index}`}>{index + 1}. {stroke.hanzi}</span>;
+                    {Array.from({ length: strokeCount }, (_, index) => {
+                      const strokeKey = item.strokes?.[index];
+                      const stroke = strokeKey ? STROKES[strokeKey] : null;
+                      return <span className={index === currentStrokeIndex && !feedback ? "active" : ""} key={`${item.character}-${index}`}>{index + 1}{stroke ? `. ${stroke.hanzi}` : ""}</span>;
                     })}
                   </div>
-                  <p className="instruction">{writerPhase === "watching" ? "Watch the brush. Name the move." : "Your turn. Wield the Pencil."}</p>
+                  <p className="instruction">{writerPhase === "watching" ? `Watch the brush.${item.strokes ? " Name the move." : " Follow every turn."}` : "Your turn. Wield the Pencil."}</p>
                   {writerPhase === "writing" && !feedback && (
                     <button className="replay-button" onClick={() => { setWriterPhase("watching"); setWriterReplay((value) => value + 1); }}>
                       <RotateCcw /> Monkey see, monkey replay
@@ -578,7 +650,7 @@ export default function Home() {
                     <div className={`answer-panel writing-result ${feedback}`} role="status">
                       <div>
                         <strong>{feedback === "correct" ? "Great Sage!" : "A little help from Guanyin."}</strong>
-                        <span>{item.pinyin} · {TONES[item.tone].name}, {TONES[item.tone].shape} · {item.meaning}</span>
+                        <span>{item.contextPinyin} · {item.contextMeaning}</span>
                       </div>
                       <button onClick={advance}>Onward west</button>
                     </div>
@@ -588,21 +660,21 @@ export default function Home() {
             </div>
           ) : current.pathway === "sound" ? (
             <div className="choice-prompt">
-              <p className="question">Which character do you hear?</p>
+              <p className="question">Which word do you hear?</p>
               <button className="sound-button" onClick={speak} aria-label="Play sound"><Volume2 /><span>Hear the spell</span></button>
               <div className="choice-grid characters">
-                {options.map((option) => <button key={option} onClick={() => respond(option)} disabled={feedback !== null}>{option}</button>)}
+                {options.map((option) => <button className={option.length > 1 ? "word-option" : ""} key={option} onClick={() => respond(option)} disabled={feedback !== null}>{option}</button>)}
               </div>
             </div>
           ) : (
             <div className="choice-prompt">
-              <div className="display-character">{item.character}</div>
+              <div className="display-character">{item.contextWord}</div>
               <div className="meaning-pronunciation">
-                <span className="pinyin">{item.pinyin}</span>
-                {tone && <span className="tone-chip"><strong>{tone.name}</strong> · {tone.shape}</span>}
-                <button className="pronunciation-button meaning-sound" onClick={speak} aria-label={`Hear ${item.character} again`}><Volume2 /><span>Hear again</span></button>
+                <span className="pinyin">{item.contextPinyin}</span>
+                {tone && item.contextWord === item.character && <span className="tone-chip"><strong>{tone.name}</strong> · {tone.shape}</span>}
+                <button className="pronunciation-button meaning-sound" onClick={speak} aria-label={`Hear ${item.contextWord} again`}><Volume2 /><span>Hear again</span></button>
               </div>
-              <p className="question">What power does this character hold?</p>
+              <p className="question">What does this word mean?</p>
               <div className="choice-grid meanings">
                 {options.map((option) => <button key={option} onClick={() => respond(option)} disabled={feedback !== null}>{option}</button>)}
               </div>
@@ -612,8 +684,8 @@ export default function Home() {
           {choiceFeedback && (
             <div className={`answer-panel ${feedback}`} role="status">
               <div>
-                <strong>{feedback === "correct" ? "Great Sage!" : current.pathway === "writing" ? "A little help from Guanyin." : `${item.character} is ${item.meaning}.`}</strong>
-                <span>{item.pinyin} · {TONES[item.tone].name}, {TONES[item.tone].shape} · {item.meaning}</span>
+                <strong>{feedback === "correct" ? "Great Sage!" : `${item.contextWord} means ${item.contextMeaning}.`}</strong>
+                <span>{item.contextPinyin} · {item.contextMeaning}</span>
               </div>
               <button onClick={advance}>Onward west</button>
             </div>

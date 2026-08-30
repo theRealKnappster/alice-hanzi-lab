@@ -1,0 +1,1650 @@
+[
+  {
+    "word": "爱",
+    "syllables": [
+      "ài"
+    ],
+    "tones": [
+      4
+    ],
+    "meaning": "love"
+  },
+  {
+    "word": "八",
+    "syllables": [
+      "bā"
+    ],
+    "tones": [
+      1
+    ],
+    "meaning": "eight"
+  },
+  {
+    "word": "爸爸",
+    "syllables": [
+      "bà",
+      "ba"
+    ],
+    "tones": [
+      4,
+      5
+    ],
+    "meaning": "Dad"
+  },
+  {
+    "word": "杯子",
+    "syllables": [
+      "bēi",
+      "zi"
+    ],
+    "tones": [
+      1,
+      5
+    ],
+    "meaning": "cup"
+  },
+  {
+    "word": "北京",
+    "syllables": [
+      "Běi",
+      "jīng"
+    ],
+    "tones": [
+      3,
+      1
+    ],
+    "meaning": "Beijing"
+  },
+  {
+    "word": "本",
+    "syllables": [
+      "běn"
+    ],
+    "tones": [
+      3
+    ],
+    "meaning": "classifier for books"
+  },
+  {
+    "word": "不",
+    "syllables": [
+      "bù"
+    ],
+    "tones": [
+      4
+    ],
+    "meaning": "not / no"
+  },
+  {
+    "word": "不客气",
+    "syllables": [
+      "bù",
+      "kè",
+      "qi"
+    ],
+    "tones": [
+      4,
+      4,
+      5
+    ],
+    "meaning": "you're welcome"
+  },
+  {
+    "word": "菜",
+    "syllables": [
+      "cài"
+    ],
+    "tones": [
+      4
+    ],
+    "meaning": "dish / vegetables"
+  },
+  {
+    "word": "茶",
+    "syllables": [
+      "chá"
+    ],
+    "tones": [
+      2
+    ],
+    "meaning": "tea"
+  },
+  {
+    "word": "吃",
+    "syllables": [
+      "chī"
+    ],
+    "tones": [
+      1
+    ],
+    "meaning": "eat"
+  },
+  {
+    "word": "出租车",
+    "syllables": [
+      "chū",
+      "zū",
+      "chē"
+    ],
+    "tones": [
+      1,
+      1,
+      1
+    ],
+    "meaning": "taxi"
+  },
+  {
+    "word": "打电话",
+    "syllables": [
+      "dǎ",
+      "diàn",
+      "huà"
+    ],
+    "tones": [
+      3,
+      4,
+      4
+    ],
+    "meaning": "make a phone call"
+  },
+  {
+    "word": "大",
+    "syllables": [
+      "dà"
+    ],
+    "tones": [
+      4
+    ],
+    "meaning": "big"
+  },
+  {
+    "word": "的",
+    "syllables": [
+      "de"
+    ],
+    "tones": [
+      5
+    ],
+    "meaning": "possessive particle"
+  },
+  {
+    "word": "点",
+    "syllables": [
+      "diǎn"
+    ],
+    "tones": [
+      3
+    ],
+    "meaning": "point / o’clock"
+  },
+  {
+    "word": "电脑",
+    "syllables": [
+      "diàn",
+      "nǎo"
+    ],
+    "tones": [
+      4,
+      3
+    ],
+    "meaning": "computer"
+  },
+  {
+    "word": "电视",
+    "syllables": [
+      "diàn",
+      "shì"
+    ],
+    "tones": [
+      4,
+      4
+    ],
+    "meaning": "television"
+  },
+  {
+    "word": "电影",
+    "syllables": [
+      "diàn",
+      "yǐng"
+    ],
+    "tones": [
+      4,
+      3
+    ],
+    "meaning": "movie"
+  },
+  {
+    "word": "东西",
+    "syllables": [
+      "dōng",
+      "xi"
+    ],
+    "tones": [
+      1,
+      5
+    ],
+    "meaning": "things"
+  },
+  {
+    "word": "都",
+    "syllables": [
+      "dōu"
+    ],
+    "tones": [
+      1
+    ],
+    "meaning": "all"
+  },
+  {
+    "word": "读",
+    "syllables": [
+      "dú"
+    ],
+    "tones": [
+      2
+    ],
+    "meaning": "to read"
+  },
+  {
+    "word": "对不起",
+    "syllables": [
+      "duì",
+      "bu",
+      "qǐ"
+    ],
+    "tones": [
+      4,
+      5,
+      3
+    ],
+    "meaning": "sorry"
+  },
+  {
+    "word": "多",
+    "syllables": [
+      "duō"
+    ],
+    "tones": [
+      1
+    ],
+    "meaning": "many"
+  },
+  {
+    "word": "多少",
+    "syllables": [
+      "duō",
+      "shao"
+    ],
+    "tones": [
+      1,
+      5
+    ],
+    "meaning": "how much"
+  },
+  {
+    "word": "儿子",
+    "syllables": [
+      "ér",
+      "zi"
+    ],
+    "tones": [
+      2,
+      5
+    ],
+    "meaning": "son"
+  },
+  {
+    "word": "二",
+    "syllables": [
+      "èr"
+    ],
+    "tones": [
+      4
+    ],
+    "meaning": "two"
+  },
+  {
+    "word": "饭馆",
+    "syllables": [
+      "fàn",
+      "guǎn"
+    ],
+    "tones": [
+      4,
+      3
+    ],
+    "meaning": "restaurant"
+  },
+  {
+    "word": "飞机",
+    "syllables": [
+      "fēi",
+      "jī"
+    ],
+    "tones": [
+      1,
+      1
+    ],
+    "meaning": "airplane"
+  },
+  {
+    "word": "分钟",
+    "syllables": [
+      "fēn",
+      "zhōng"
+    ],
+    "tones": [
+      1,
+      1
+    ],
+    "meaning": "minute"
+  },
+  {
+    "word": "高兴",
+    "syllables": [
+      "gāo",
+      "xìng"
+    ],
+    "tones": [
+      1,
+      4
+    ],
+    "meaning": "happy"
+  },
+  {
+    "word": "个",
+    "syllables": [
+      "gè"
+    ],
+    "tones": [
+      4
+    ],
+    "meaning": "general classifier"
+  },
+  {
+    "word": "工作",
+    "syllables": [
+      "gōng",
+      "zuò"
+    ],
+    "tones": [
+      1,
+      4
+    ],
+    "meaning": "work"
+  },
+  {
+    "word": "狗",
+    "syllables": [
+      "gǒu"
+    ],
+    "tones": [
+      3
+    ],
+    "meaning": "dog"
+  },
+  {
+    "word": "汉语",
+    "syllables": [
+      "Hàn",
+      "yǔ"
+    ],
+    "tones": [
+      4,
+      3
+    ],
+    "meaning": "Chinese language"
+  },
+  {
+    "word": "好",
+    "syllables": [
+      "hǎo"
+    ],
+    "tones": [
+      3
+    ],
+    "meaning": "good"
+  },
+  {
+    "word": "喝",
+    "syllables": [
+      "hē"
+    ],
+    "tones": [
+      1
+    ],
+    "meaning": "to drink"
+  },
+  {
+    "word": "和",
+    "syllables": [
+      "hé"
+    ],
+    "tones": [
+      2
+    ],
+    "meaning": "and"
+  },
+  {
+    "word": "很",
+    "syllables": [
+      "hěn"
+    ],
+    "tones": [
+      3
+    ],
+    "meaning": "very"
+  },
+  {
+    "word": "后面",
+    "syllables": [
+      "hòu",
+      "mian"
+    ],
+    "tones": [
+      4,
+      5
+    ],
+    "meaning": "back"
+  },
+  {
+    "word": "回",
+    "syllables": [
+      "huí"
+    ],
+    "tones": [
+      2
+    ],
+    "meaning": "to return"
+  },
+  {
+    "word": "会",
+    "syllables": [
+      "huì"
+    ],
+    "tones": [
+      4
+    ],
+    "meaning": "can / know how"
+  },
+  {
+    "word": "火车站",
+    "syllables": [
+      "huǒ",
+      "chē",
+      "zhàn"
+    ],
+    "tones": [
+      3,
+      1,
+      4
+    ],
+    "meaning": "train station"
+  },
+  {
+    "word": "几",
+    "syllables": [
+      "jǐ"
+    ],
+    "tones": [
+      3
+    ],
+    "meaning": "how many"
+  },
+  {
+    "word": "家",
+    "syllables": [
+      "jiā"
+    ],
+    "tones": [
+      1
+    ],
+    "meaning": "home / family"
+  },
+  {
+    "word": "叫",
+    "syllables": [
+      "jiào"
+    ],
+    "tones": [
+      4
+    ],
+    "meaning": "to be called"
+  },
+  {
+    "word": "今天",
+    "syllables": [
+      "jīn",
+      "tiān"
+    ],
+    "tones": [
+      1,
+      1
+    ],
+    "meaning": "today"
+  },
+  {
+    "word": "九",
+    "syllables": [
+      "jiǔ"
+    ],
+    "tones": [
+      3
+    ],
+    "meaning": "nine"
+  },
+  {
+    "word": "开",
+    "syllables": [
+      "kāi"
+    ],
+    "tones": [
+      1
+    ],
+    "meaning": "to open"
+  },
+  {
+    "word": "看",
+    "syllables": [
+      "kàn"
+    ],
+    "tones": [
+      4
+    ],
+    "meaning": "see"
+  },
+  {
+    "word": "看见",
+    "syllables": [
+      "kàn",
+      "jiàn"
+    ],
+    "tones": [
+      4,
+      4
+    ],
+    "meaning": "see"
+  },
+  {
+    "word": "块",
+    "syllables": [
+      "kuài"
+    ],
+    "tones": [
+      4
+    ],
+    "meaning": "piece / yuan"
+  },
+  {
+    "word": "来",
+    "syllables": [
+      "lái"
+    ],
+    "tones": [
+      2
+    ],
+    "meaning": "come"
+  },
+  {
+    "word": "老师",
+    "syllables": [
+      "lǎo",
+      "shī"
+    ],
+    "tones": [
+      3,
+      1
+    ],
+    "meaning": "teacher"
+  },
+  {
+    "word": "了",
+    "syllables": [
+      "le"
+    ],
+    "tones": [
+      5
+    ],
+    "meaning": "completed-action particle"
+  },
+  {
+    "word": "冷",
+    "syllables": [
+      "lěng"
+    ],
+    "tones": [
+      3
+    ],
+    "meaning": "cold"
+  },
+  {
+    "word": "里",
+    "syllables": [
+      "lǐ"
+    ],
+    "tones": [
+      3
+    ],
+    "meaning": "inside"
+  },
+  {
+    "word": "零",
+    "syllables": [
+      "líng"
+    ],
+    "tones": [
+      2
+    ],
+    "meaning": "zero"
+  },
+  {
+    "word": "六",
+    "syllables": [
+      "liù"
+    ],
+    "tones": [
+      4
+    ],
+    "meaning": "six"
+  },
+  {
+    "word": "妈妈",
+    "syllables": [
+      "mā",
+      "ma"
+    ],
+    "tones": [
+      1,
+      5
+    ],
+    "meaning": "mom"
+  },
+  {
+    "word": "吗",
+    "syllables": [
+      "ma"
+    ],
+    "tones": [
+      5
+    ],
+    "meaning": "yes/no question particle"
+  },
+  {
+    "word": "买",
+    "syllables": [
+      "mǎi"
+    ],
+    "tones": [
+      3
+    ],
+    "meaning": "to buy"
+  },
+  {
+    "word": "猫",
+    "syllables": [
+      "māo"
+    ],
+    "tones": [
+      1
+    ],
+    "meaning": "cat"
+  },
+  {
+    "word": "没",
+    "syllables": [
+      "méi"
+    ],
+    "tones": [
+      2
+    ],
+    "meaning": "not have / have not"
+  },
+  {
+    "word": "没关系",
+    "syllables": [
+      "méi",
+      "guān",
+      "xi"
+    ],
+    "tones": [
+      2,
+      1,
+      5
+    ],
+    "meaning": "it doesn't matter"
+  },
+  {
+    "word": "米饭",
+    "syllables": [
+      "mǐ",
+      "fàn"
+    ],
+    "tones": [
+      3,
+      4
+    ],
+    "meaning": "(cooked) rice"
+  },
+  {
+    "word": "名字",
+    "syllables": [
+      "míng",
+      "zi"
+    ],
+    "tones": [
+      2,
+      5
+    ],
+    "meaning": "name"
+  },
+  {
+    "word": "明天",
+    "syllables": [
+      "míng",
+      "tiān"
+    ],
+    "tones": [
+      2,
+      1
+    ],
+    "meaning": "tomorrow"
+  },
+  {
+    "word": "哪",
+    "syllables": [
+      "nǎ"
+    ],
+    "tones": [
+      3
+    ],
+    "meaning": "which"
+  },
+  {
+    "word": "那",
+    "syllables": [
+      "nà"
+    ],
+    "tones": [
+      4
+    ],
+    "meaning": "that"
+  },
+  {
+    "word": "呢",
+    "syllables": [
+      "ne"
+    ],
+    "tones": [
+      5
+    ],
+    "meaning": "question particle"
+  },
+  {
+    "word": "能",
+    "syllables": [
+      "néng"
+    ],
+    "tones": [
+      2
+    ],
+    "meaning": "can"
+  },
+  {
+    "word": "你",
+    "syllables": [
+      "nǐ"
+    ],
+    "tones": [
+      3
+    ],
+    "meaning": "you (singular)"
+  },
+  {
+    "word": "年",
+    "syllables": [
+      "nián"
+    ],
+    "tones": [
+      2
+    ],
+    "meaning": "year"
+  },
+  {
+    "word": "女儿",
+    "syllables": [
+      "nǚ",
+      "ér"
+    ],
+    "tones": [
+      3,
+      2
+    ],
+    "meaning": "daughter"
+  },
+  {
+    "word": "朋友",
+    "syllables": [
+      "péng",
+      "you"
+    ],
+    "tones": [
+      2,
+      5
+    ],
+    "meaning": "friend"
+  },
+  {
+    "word": "漂亮",
+    "syllables": [
+      "piào",
+      "liang"
+    ],
+    "tones": [
+      4,
+      5
+    ],
+    "meaning": "pretty"
+  },
+  {
+    "word": "苹果",
+    "syllables": [
+      "píng",
+      "guǒ"
+    ],
+    "tones": [
+      2,
+      3
+    ],
+    "meaning": "apple"
+  },
+  {
+    "word": "七",
+    "syllables": [
+      "qī"
+    ],
+    "tones": [
+      1
+    ],
+    "meaning": "seven"
+  },
+  {
+    "word": "前面",
+    "syllables": [
+      "qián",
+      "miàn"
+    ],
+    "tones": [
+      2,
+      4
+    ],
+    "meaning": "in front"
+  },
+  {
+    "word": "钱",
+    "syllables": [
+      "qián"
+    ],
+    "tones": [
+      2
+    ],
+    "meaning": "money"
+  },
+  {
+    "word": "请",
+    "syllables": [
+      "qǐng"
+    ],
+    "tones": [
+      3
+    ],
+    "meaning": "please"
+  },
+  {
+    "word": "去",
+    "syllables": [
+      "qù"
+    ],
+    "tones": [
+      4
+    ],
+    "meaning": "go"
+  },
+  {
+    "word": "热",
+    "syllables": [
+      "rè"
+    ],
+    "tones": [
+      4
+    ],
+    "meaning": "hot"
+  },
+  {
+    "word": "人",
+    "syllables": [
+      "rén"
+    ],
+    "tones": [
+      2
+    ],
+    "meaning": "person"
+  },
+  {
+    "word": "认识",
+    "syllables": [
+      "rèn",
+      "shi"
+    ],
+    "tones": [
+      4,
+      5
+    ],
+    "meaning": "to know / recognize"
+  },
+  {
+    "word": "日",
+    "syllables": [
+      "rì"
+    ],
+    "tones": [
+      4
+    ],
+    "meaning": "day / date"
+  },
+  {
+    "word": "三",
+    "syllables": [
+      "sān"
+    ],
+    "tones": [
+      1
+    ],
+    "meaning": "three"
+  },
+  {
+    "word": "商店",
+    "syllables": [
+      "shāng",
+      "diàn"
+    ],
+    "tones": [
+      1,
+      4
+    ],
+    "meaning": "shop"
+  },
+  {
+    "word": "上",
+    "syllables": [
+      "shàng"
+    ],
+    "tones": [
+      4
+    ],
+    "meaning": "up / above"
+  },
+  {
+    "word": "上午",
+    "syllables": [
+      "shàng",
+      "wǔ"
+    ],
+    "tones": [
+      4,
+      3
+    ],
+    "meaning": "morning"
+  },
+  {
+    "word": "少",
+    "syllables": [
+      "shǎo"
+    ],
+    "tones": [
+      3
+    ],
+    "meaning": "few"
+  },
+  {
+    "word": "什么",
+    "syllables": [
+      "shén",
+      "me"
+    ],
+    "tones": [
+      2,
+      5
+    ],
+    "meaning": "what"
+  },
+  {
+    "word": "十",
+    "syllables": [
+      "shí"
+    ],
+    "tones": [
+      2
+    ],
+    "meaning": "ten"
+  },
+  {
+    "word": "时候",
+    "syllables": [
+      "shí",
+      "hou"
+    ],
+    "tones": [
+      2,
+      5
+    ],
+    "meaning": "time"
+  },
+  {
+    "word": "是",
+    "syllables": [
+      "shì"
+    ],
+    "tones": [
+      4
+    ],
+    "meaning": "to be"
+  },
+  {
+    "word": "书",
+    "syllables": [
+      "shū"
+    ],
+    "tones": [
+      1
+    ],
+    "meaning": "book"
+  },
+  {
+    "word": "谁",
+    "syllables": [
+      "shéi"
+    ],
+    "tones": [
+      2
+    ],
+    "meaning": "who"
+  },
+  {
+    "word": "水",
+    "syllables": [
+      "shuǐ"
+    ],
+    "tones": [
+      3
+    ],
+    "meaning": "water"
+  },
+  {
+    "word": "水果",
+    "syllables": [
+      "shuǐ",
+      "guǒ"
+    ],
+    "tones": [
+      3,
+      3
+    ],
+    "meaning": "fruit"
+  },
+  {
+    "word": "睡觉",
+    "syllables": [
+      "shuì",
+      "jiào"
+    ],
+    "tones": [
+      4,
+      4
+    ],
+    "meaning": "to sleep"
+  },
+  {
+    "word": "说话",
+    "syllables": [
+      "shuō",
+      "huà"
+    ],
+    "tones": [
+      1,
+      4
+    ],
+    "meaning": "to speak"
+  },
+  {
+    "word": "四",
+    "syllables": [
+      "sì"
+    ],
+    "tones": [
+      4
+    ],
+    "meaning": "four"
+  },
+  {
+    "word": "岁",
+    "syllables": [
+      "suì"
+    ],
+    "tones": [
+      4
+    ],
+    "meaning": "years old"
+  },
+  {
+    "word": "他",
+    "syllables": [
+      "tā"
+    ],
+    "tones": [
+      1
+    ],
+    "meaning": "he"
+  },
+  {
+    "word": "她",
+    "syllables": [
+      "tā"
+    ],
+    "tones": [
+      1
+    ],
+    "meaning": "she"
+  },
+  {
+    "word": "太",
+    "syllables": [
+      "tài"
+    ],
+    "tones": [
+      4
+    ],
+    "meaning": "too"
+  },
+  {
+    "word": "天气",
+    "syllables": [
+      "tiān",
+      "qì"
+    ],
+    "tones": [
+      1,
+      4
+    ],
+    "meaning": "weather"
+  },
+  {
+    "word": "听",
+    "syllables": [
+      "tīng"
+    ],
+    "tones": [
+      1
+    ],
+    "meaning": "listen"
+  },
+  {
+    "word": "同学",
+    "syllables": [
+      "tóng",
+      "xué"
+    ],
+    "tones": [
+      2,
+      2
+    ],
+    "meaning": "fellow student"
+  },
+  {
+    "word": "喂",
+    "syllables": [
+      "wèi"
+    ],
+    "tones": [
+      4
+    ],
+    "meaning": "hello (on the phone)"
+  },
+  {
+    "word": "我",
+    "syllables": [
+      "wǒ"
+    ],
+    "tones": [
+      3
+    ],
+    "meaning": "I"
+  },
+  {
+    "word": "我们",
+    "syllables": [
+      "wǒ",
+      "men"
+    ],
+    "tones": [
+      3,
+      5
+    ],
+    "meaning": "we"
+  },
+  {
+    "word": "五",
+    "syllables": [
+      "wǔ"
+    ],
+    "tones": [
+      3
+    ],
+    "meaning": "five"
+  },
+  {
+    "word": "喜欢",
+    "syllables": [
+      "xǐ",
+      "huan"
+    ],
+    "tones": [
+      3,
+      5
+    ],
+    "meaning": "to like"
+  },
+  {
+    "word": "下",
+    "syllables": [
+      "xià"
+    ],
+    "tones": [
+      4
+    ],
+    "meaning": "down / below"
+  },
+  {
+    "word": "下午",
+    "syllables": [
+      "xià",
+      "wǔ"
+    ],
+    "tones": [
+      4,
+      3
+    ],
+    "meaning": "afternoon"
+  },
+  {
+    "word": "下雨",
+    "syllables": [
+      "xià",
+      "yǔ"
+    ],
+    "tones": [
+      4,
+      3
+    ],
+    "meaning": "to rain"
+  },
+  {
+    "word": "先生",
+    "syllables": [
+      "xiān",
+      "sheng"
+    ],
+    "tones": [
+      1,
+      5
+    ],
+    "meaning": "Mr."
+  },
+  {
+    "word": "现在",
+    "syllables": [
+      "xiàn",
+      "zài"
+    ],
+    "tones": [
+      4,
+      4
+    ],
+    "meaning": "now"
+  },
+  {
+    "word": "想",
+    "syllables": [
+      "xiǎng"
+    ],
+    "tones": [
+      3
+    ],
+    "meaning": "to think / want"
+  },
+  {
+    "word": "小",
+    "syllables": [
+      "xiǎo"
+    ],
+    "tones": [
+      3
+    ],
+    "meaning": "small"
+  },
+  {
+    "word": "小姐",
+    "syllables": [
+      "xiǎo",
+      "jie"
+    ],
+    "tones": [
+      3,
+      5
+    ],
+    "meaning": "young lady"
+  },
+  {
+    "word": "些",
+    "syllables": [
+      "xiē"
+    ],
+    "tones": [
+      1
+    ],
+    "meaning": "some"
+  },
+  {
+    "word": "写",
+    "syllables": [
+      "xiě"
+    ],
+    "tones": [
+      3
+    ],
+    "meaning": "to write"
+  },
+  {
+    "word": "谢谢",
+    "syllables": [
+      "xiè",
+      "xie"
+    ],
+    "tones": [
+      4,
+      5
+    ],
+    "meaning": "thank you"
+  },
+  {
+    "word": "星期",
+    "syllables": [
+      "xīng",
+      "qī"
+    ],
+    "tones": [
+      1,
+      1
+    ],
+    "meaning": "week"
+  },
+  {
+    "word": "学生",
+    "syllables": [
+      "xué",
+      "sheng"
+    ],
+    "tones": [
+      2,
+      5
+    ],
+    "meaning": "student"
+  },
+  {
+    "word": "学习",
+    "syllables": [
+      "xué",
+      "xí"
+    ],
+    "tones": [
+      2,
+      2
+    ],
+    "meaning": "learn"
+  },
+  {
+    "word": "学校",
+    "syllables": [
+      "xué",
+      "xiào"
+    ],
+    "tones": [
+      2,
+      4
+    ],
+    "meaning": "school"
+  },
+  {
+    "word": "一",
+    "syllables": [
+      "yī"
+    ],
+    "tones": [
+      1
+    ],
+    "meaning": "one"
+  },
+  {
+    "word": "衣服",
+    "syllables": [
+      "yī",
+      "fu"
+    ],
+    "tones": [
+      1,
+      5
+    ],
+    "meaning": "clothes"
+  },
+  {
+    "word": "医生",
+    "syllables": [
+      "yī",
+      "shēng"
+    ],
+    "tones": [
+      1,
+      1
+    ],
+    "meaning": "doctor"
+  },
+  {
+    "word": "医院",
+    "syllables": [
+      "yī",
+      "yuàn"
+    ],
+    "tones": [
+      1,
+      4
+    ],
+    "meaning": "hospital"
+  },
+  {
+    "word": "椅子",
+    "syllables": [
+      "yǐ",
+      "zi"
+    ],
+    "tones": [
+      3,
+      5
+    ],
+    "meaning": "chair"
+  },
+  {
+    "word": "有",
+    "syllables": [
+      "yǒu"
+    ],
+    "tones": [
+      3
+    ],
+    "meaning": "have"
+  },
+  {
+    "word": "月",
+    "syllables": [
+      "yuè"
+    ],
+    "tones": [
+      4
+    ],
+    "meaning": "month / moon"
+  },
+  {
+    "word": "再见",
+    "syllables": [
+      "zài",
+      "jiàn"
+    ],
+    "tones": [
+      4,
+      4
+    ],
+    "meaning": "goodbye"
+  },
+  {
+    "word": "在",
+    "syllables": [
+      "zài"
+    ],
+    "tones": [
+      4
+    ],
+    "meaning": "at"
+  },
+  {
+    "word": "怎么",
+    "syllables": [
+      "zěn",
+      "me"
+    ],
+    "tones": [
+      3,
+      5
+    ],
+    "meaning": "how"
+  },
+  {
+    "word": "怎么样",
+    "syllables": [
+      "zěn",
+      "me",
+      "yàng"
+    ],
+    "tones": [
+      3,
+      5,
+      4
+    ],
+    "meaning": "how about"
+  },
+  {
+    "word": "这",
+    "syllables": [
+      "zhè"
+    ],
+    "tones": [
+      4
+    ],
+    "meaning": "this"
+  },
+  {
+    "word": "中国",
+    "syllables": [
+      "Zhōng",
+      "guó"
+    ],
+    "tones": [
+      1,
+      2
+    ],
+    "meaning": "China"
+  },
+  {
+    "word": "中午",
+    "syllables": [
+      "zhōng",
+      "wǔ"
+    ],
+    "tones": [
+      1,
+      3
+    ],
+    "meaning": "noon"
+  },
+  {
+    "word": "住",
+    "syllables": [
+      "zhù"
+    ],
+    "tones": [
+      4
+    ],
+    "meaning": "to live"
+  },
+  {
+    "word": "桌子",
+    "syllables": [
+      "zhuō",
+      "zi"
+    ],
+    "tones": [
+      1,
+      5
+    ],
+    "meaning": "table"
+  },
+  {
+    "word": "字",
+    "syllables": [
+      "zì"
+    ],
+    "tones": [
+      4
+    ],
+    "meaning": "written character"
+  },
+  {
+    "word": "昨天",
+    "syllables": [
+      "zuó",
+      "tiān"
+    ],
+    "tones": [
+      2,
+      1
+    ],
+    "meaning": "yesterday"
+  },
+  {
+    "word": "坐",
+    "syllables": [
+      "zuò"
+    ],
+    "tones": [
+      4
+    ],
+    "meaning": "sit"
+  },
+  {
+    "word": "做",
+    "syllables": [
+      "zuò"
+    ],
+    "tones": [
+      4
+    ],
+    "meaning": "do"
+  }
+]

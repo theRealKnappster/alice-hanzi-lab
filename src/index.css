@@ -127,6 +127,7 @@ button:focus-visible { outline: 3px solid color-mix(in srgb, var(--accent) 55%, 
 .current-stroke strong { font-size: 1.04rem; }
 .current-stroke strong em { color: var(--muted); font-size: 0.84rem; font-style: normal; font-weight: 620; }
 .current-stroke small { color: var(--muted); font-size: 0.78rem; }
+.generic-stroke strong { font-size: 0.94rem; line-height: 1.3; }
 .stroke-sequence { width: 100%; display: flex; flex-wrap: wrap; justify-content: flex-start; gap: 6px; }
 .stroke-sequence span { padding: 5px 8px; border: 1px solid var(--faint); border-radius: 9px; color: var(--muted); background: var(--card); font-size: 0.72rem; }
 .stroke-sequence span.active { border-color: var(--accent); color: var(--ink); background: var(--accent-soft); font-weight: 760; }
@@ -162,6 +163,7 @@ button:focus-visible { outline: 3px solid color-mix(in srgb, var(--accent) 55%, 
 .choice-grid.meanings { grid-template-columns: 1fr; max-width: 420px; }
 .choice-grid button { min-height: 76px; border: 1px solid var(--faint); border-radius: 22px; color: var(--ink); background: var(--card); box-shadow: 0 8px 24px rgba(50, 40, 30, 0.06); cursor: pointer; }
 .choice-grid.characters button { font: 500 clamp(2.8rem, 8vw, 4.6rem)/1 "Kaiti SC", "STKaiti", "PingFang SC", serif; }
+.choice-grid.characters button.word-option { font-size: clamp(1.9rem, 5vw, 3rem); }
 .choice-grid.meanings button { font-size: 1.02rem; font-weight: 650; }
 .choice-grid button:active { border-color: var(--accent); transform: scale(0.985); }
 
