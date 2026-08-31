@@ -2,7 +2,7 @@
 
 ## Curriculum boundary
 
-The HSK Level 1 coverage boundary is the established 150-word list published by Chinese Testing International in *新 HSK（一级）词汇（150）*:
+The HSK Levels 1–2 coverage boundary is the established cumulative 300-word list published by Chinese Testing International in *新 HSK（一级）词汇（150）* and *新 HSK（二级）词汇（300）*:
 
 https://www.chinesetest.cn/userfiles/file/cihui.pdf
 

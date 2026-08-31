@@ -11,8 +11,10 @@ import {
   X,
 } from "lucide-react";
 import hsk1WordsData from "./data/hsk1.json";
+import hsk2WordsData from "./data/hsk2.json";
 
 type Pathway = "writing" | "sound" | "meaning";
+type WordPathway = Exclude<Pathway, "writing">;
 
 type StrokeKey = keyof typeof STROKES;
 
@@ -23,6 +25,7 @@ type HskWord = {
   syllables: string[];
   tones: Tone[];
   meaning: string;
+  level: 1 | 2;
 };
 
 type HanziItem = {
@@ -44,14 +47,22 @@ type CharacterProgress = Record<Pathway, number> & {
   correct: Record<Pathway, number>;
 };
 
+type WordProgress = Record<WordPathway, number> & {
+  attempts: Record<WordPathway, number>;
+  correct: Record<WordPathway, number>;
+};
+
 type StoredProgress = {
   introduced: number;
   sessions: number;
   totalPrompts: number;
   characters: Record<string, CharacterProgress>;
+  words: Record<string, WordProgress>;
 };
 
-type Prompt = { pathway: Pathway; itemIndex: number };
+type Prompt =
+  | { pathway: "writing"; itemIndex: number }
+  | { pathway: WordPathway; wordIndex: number };
 
 type WriterInstance = {
   animateCharacter: (options?: { onComplete?: () => void }) => void;
@@ -130,12 +141,14 @@ const CORE_HANZI: CoreHanziItem[] = [
   { character: "他", pinyin: "tā", meaning: "he / him", tone: 1, strokes: ["pie", "shu", "heng_zhe_gou", "shu", "shu_wan_gou"], note: "Person-side 亻 plus 也." },
 ];
 
-const HSK1_WORDS = hsk1WordsData as HskWord[];
+const HSK1_WORDS: HskWord[] = (hsk1WordsData as Omit<HskWord, "level">[]).map((word) => ({ ...word, level: 1 }));
+const HSK2_WORDS: HskWord[] = (hsk2WordsData as Omit<HskWord, "level">[]).map((word) => ({ ...word, level: 2 }));
+const HSK_WORDS = [...HSK1_WORDS, ...HSK2_WORDS];
 const coreCharacters = new Set(CORE_HANZI.map((item) => item.character));
 const expandedHanzi: HanziItem[] = [];
 const expandedCharacters = new Set<string>();
 
-for (const word of HSK1_WORDS) {
+for (const word of HSK_WORDS) {
   [...word.word].forEach((character, characterIndex) => {
     if (coreCharacters.has(character) || expandedCharacters.has(character)) return;
     expandedCharacters.add(character);
@@ -145,7 +158,7 @@ for (const word of HSK1_WORDS) {
       meaning: word.meaning,
       tone: word.tones[characterIndex],
       note: word.word === character
-        ? `${character} is an HSK 1 word meaning “${word.meaning}.”`
+        ? `${character} is an HSK ${word.level} word meaning “${word.meaning}.”`
         : `${character} appears in ${word.word} (${word.syllables.join(" ")}), meaning “${word.meaning}.”`,
       contextWord: word.word,
       contextPinyin: word.syllables.join(" "),
@@ -164,18 +177,27 @@ const HANZI: HanziItem[] = [
   ...expandedHanzi,
 ];
 
+const HSK1_CHARACTER_COUNT = new Set(HSK1_WORDS.flatMap((word) => [...word.word])).size;
+const wordIndexByText = new Map(HSK_WORDS.map((word, index) => [word.word, index]));
+
+function wordPrompt(pathway: WordPathway, word: string): Prompt {
+  const wordIndex = wordIndexByText.get(word);
+  if (wordIndex === undefined) throw new Error(`Missing curriculum word: ${word}`);
+  return { pathway, wordIndex };
+}
+
 const firstSession: Prompt[] = [
   { pathway: "writing", itemIndex: 0 },
   { pathway: "writing", itemIndex: 1 },
-  { pathway: "sound", itemIndex: 0 },
+  wordPrompt("sound", "一"),
   { pathway: "writing", itemIndex: 2 },
-  { pathway: "meaning", itemIndex: 1 },
-  { pathway: "sound", itemIndex: 2 },
+  wordPrompt("meaning", "二"),
+  wordPrompt("sound", "三"),
   { pathway: "writing", itemIndex: 3 },
-  { pathway: "meaning", itemIndex: 0 },
+  wordPrompt("meaning", "一"),
   { pathway: "writing", itemIndex: 4 },
-  { pathway: "sound", itemIndex: 3 },
-  { pathway: "meaning", itemIndex: 4 },
+  wordPrompt("sound", "十"),
+  wordPrompt("meaning", "人"),
   { pathway: "writing", itemIndex: 0 },
 ];
 
@@ -189,8 +211,17 @@ function emptyCharacterProgress(): CharacterProgress {
   };
 }
 
+function emptyWordProgress(): WordProgress {
+  return {
+    sound: 0,
+    meaning: 0,
+    attempts: { sound: 0, meaning: 0 },
+    correct: { sound: 0, meaning: 0 },
+  };
+}
+
 function emptyProgress(): StoredProgress {
-  return { introduced: 0, sessions: 0, totalPrompts: 0, characters: {} };
+  return { introduced: 0, sessions: 0, totalPrompts: 0, characters: {}, words: {} };
 }
 
 function loadProgress(): StoredProgress {
@@ -204,10 +235,39 @@ function loadProgress(): StoredProgress {
         window.localStorage.removeItem(legacyKey);
       }
     }
-    return raw ? (JSON.parse(raw) as StoredProgress) : emptyProgress();
+    if (!raw) return emptyProgress();
+    const parsed = JSON.parse(raw) as Partial<StoredProgress>;
+    const normalized: StoredProgress = {
+      ...emptyProgress(),
+      ...parsed,
+      characters: parsed.characters ?? {},
+      words: parsed.words ?? {},
+    };
+    if (!parsed.words) {
+      for (const word of HSK_WORDS) {
+        if (word.word.length !== 1) continue;
+        const legacy = normalized.characters[word.word];
+        if (!legacy) continue;
+        normalized.words[word.word] = {
+          sound: legacy.sound,
+          meaning: legacy.meaning,
+          attempts: { sound: legacy.attempts.sound, meaning: legacy.attempts.meaning },
+          correct: { sound: legacy.correct.sound, meaning: legacy.correct.meaning },
+        };
+      }
+    }
+    return normalized;
   } catch {
     return emptyProgress();
   }
+}
+
+function unlockedWordIndexes(introducedCount: number, hsk2Unlocked = introducedCount >= HSK1_CHARACTER_COUNT): number[] {
+  const introducedCharacters = new Set(HANZI.slice(0, introducedCount).map((item) => item.character));
+  return HSK_WORDS.flatMap((word, wordIndex) => {
+    if (word.level === 2 && !hsk2Unlocked) return [];
+    return [...word.word].every((character) => introducedCharacters.has(character)) ? [wordIndex] : [];
+  });
 }
 
 function seededOptions<T>(correct: T, pool: T[], seed: number): T[] {
@@ -227,29 +287,40 @@ function seededOptions<T>(correct: T, pool: T[], seed: number): T[] {
 
 function buildAdaptiveSession(progress: StoredProgress): Prompt[] {
   const currentIntroduced = Math.max(progress.introduced, 5);
-  const introduceThrough = Math.min(HANZI.length, currentIntroduced + 2);
+  const curriculumBoundary = currentIntroduced < HSK1_CHARACTER_COUNT ? HSK1_CHARACTER_COUNT : HANZI.length;
+  const introduceThrough = Math.min(curriculumBoundary, currentIntroduced + 2);
   const prompts: Prompt[] = [];
 
   for (let index = currentIntroduced; index < introduceThrough; index += 1) {
     prompts.push({ pathway: "writing", itemIndex: index });
   }
 
-  const candidates: Array<Prompt & { score: number; tie: number }> = [];
+  const candidates: Array<{ prompt: Prompt; score: number; tie: number }> = [];
   for (let itemIndex = 0; itemIndex < introduceThrough; itemIndex += 1) {
     const record = progress.characters[HANZI[itemIndex].character] ?? emptyCharacterProgress();
-    (["writing", "sound", "meaning"] as Pathway[]).forEach((pathway, offset) => {
+    candidates.push({
+      prompt: { pathway: "writing", itemIndex },
+      score: record.writing,
+      tie: ((itemIndex + 1) * 7 + progress.sessions) % 17,
+    });
+  }
+
+  for (const wordIndex of unlockedWordIndexes(introduceThrough, currentIntroduced >= HSK1_CHARACTER_COUNT)) {
+    const word = HSK_WORDS[wordIndex];
+    const record = progress.words[word.word] ?? emptyWordProgress();
+    (["sound", "meaning"] as WordPathway[]).forEach((pathway, offset) => {
       candidates.push({
-        pathway,
-        itemIndex,
+        prompt: { pathway, wordIndex },
         score: record[pathway],
-        tie: ((itemIndex + 1) * 7 + offset * 3 + progress.sessions) % 17,
+        tie: ((wordIndex + 1) * 11 + offset * 5 + progress.sessions) % 23,
       });
     });
   }
+
   candidates.sort((a, b) => a.score - b.score || a.tie - b.tie);
   for (const candidate of candidates) {
     if (prompts.length >= SESSION_LENGTH) break;
-    prompts.push({ pathway: candidate.pathway, itemIndex: candidate.itemIndex });
+    prompts.push(candidate.prompt);
   }
   return prompts;
 }
@@ -299,40 +370,46 @@ export default function Home() {
   }, [progress]);
 
   const current = session[step];
-  const item = current ? HANZI[current.itemIndex] : null;
+  const item = current?.pathway === "writing" ? HANZI[current.itemIndex] : null;
+  const word = current && current.pathway !== "writing" ? HSK_WORDS[current.wordIndex] : null;
   const tone = item ? TONES[item.tone] : null;
   const currentStroke = item?.strokes ? STROKES[item.strokes[currentStrokeIndex]] : null;
   const strokeCount = item?.strokes?.length ?? currentStrokeCount;
   const introducedCount = Math.max(progress?.introduced ?? 0, progress?.sessions ? 5 : 0);
-  const optionPool = HANZI.slice(0, Math.max(5, introducedCount));
+  const optionPool = unlockedWordIndexes(Math.max(5, introducedCount)).map((wordIndex) => HSK_WORDS[wordIndex]);
 
   const options = useMemo(() => {
-    if (!current || !item) return [];
+    if (!current || current.pathway === "writing" || !word) return [];
     if (current.pathway === "sound") {
-      return seededOptions(item.contextWord, optionPool.map((entry) => entry.contextWord), current.itemIndex + step);
+      return seededOptions(word.word, optionPool.map((entry) => entry.word), current.wordIndex + step);
     }
-    return seededOptions(item.contextMeaning, optionPool.map((entry) => entry.contextMeaning), current.itemIndex + step);
-  }, [current, item, optionPool, step]);
+    return seededOptions(word.meaning, optionPool.map((entry) => entry.meaning), current.wordIndex + step);
+  }, [current, optionPool, step, word]);
 
   const recordResult = useCallback((correct: boolean, mistakes = 0) => {
-    if (!current || !item) return;
+    if (!current) return;
     setProgress((previous) => {
       if (!previous) return previous;
       const next = structuredClone(previous);
-      const record = next.characters[item.character] ?? emptyCharacterProgress();
-      record.attempts[current.pathway] += 1;
-      if (correct) record.correct[current.pathway] += 1;
       const clean = correct && mistakes === 0;
-      record[current.pathway] = Math.max(
-        0,
-        Math.min(3, record[current.pathway] + (clean ? 1 : mistakes > 2 ? -1 : 0)),
-      );
-      next.characters[item.character] = record;
-      next.introduced = Math.max(next.introduced, current.itemIndex + 1);
+      if (current.pathway === "writing" && item) {
+        const record = next.characters[item.character] ?? emptyCharacterProgress();
+        record.attempts.writing += 1;
+        if (correct) record.correct.writing += 1;
+        record.writing = Math.max(0, Math.min(3, record.writing + (clean ? 1 : mistakes > 2 ? -1 : 0)));
+        next.characters[item.character] = record;
+        next.introduced = Math.max(next.introduced, current.itemIndex + 1);
+      } else if (current.pathway !== "writing" && word) {
+        const record = next.words[word.word] ?? emptyWordProgress();
+        record.attempts[current.pathway] += 1;
+        if (correct) record.correct[current.pathway] += 1;
+        record[current.pathway] = Math.max(0, Math.min(3, record[current.pathway] + (clean ? 1 : 0)));
+        next.words[word.word] = record;
+      }
       next.totalPrompts += 1;
       return next;
     });
-  }, [current, item]);
+  }, [current, item, word]);
 
   const advance = useCallback(() => {
     setFeedback(null);
@@ -348,17 +425,17 @@ export default function Home() {
   }, [session.length, step]);
 
   const respond = (selected: string) => {
-    if (!item || !current || feedback) return;
-    const answer = current.pathway === "sound" ? item.contextWord : item.contextMeaning;
+    if (!word || !current || current.pathway === "writing" || feedback) return;
+    const answer = current.pathway === "sound" ? word.word : word.meaning;
     const correct = selected === answer;
     recordResult(correct);
     setFeedback(correct ? "correct" : "retry");
   };
 
   const speak = useCallback(() => {
-    if (!item || !("speechSynthesis" in window)) return;
+    if ((!item && !word) || !("speechSynthesis" in window)) return;
     window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(current?.pathway === "writing" ? item.character : item.contextWord);
+    const utterance = new SpeechSynthesisUtterance(item?.character ?? word?.word ?? "");
     const voices = window.speechSynthesis.getVoices();
     utterance.voice =
       voices.find((voice) => voice.lang.toLowerCase() === "zh-cn") ??
@@ -367,13 +444,13 @@ export default function Home() {
     utterance.lang = "zh-CN";
     utterance.rate = 0.72;
     window.speechSynthesis.speak(utterance);
-  }, [current?.pathway, item]);
+  }, [item, word]);
 
   useEffect(() => {
-    if (!started || !item) return;
+    if (!started || (!item && !word)) return;
     const timer = window.setTimeout(speak, 280);
     return () => window.clearTimeout(timer);
-  }, [item, speak, started, step]);
+  }, [item, speak, started, step, word]);
 
   useEffect(() => {
     if (!feedback) return;
@@ -479,9 +556,9 @@ export default function Home() {
   const completed = started && step >= session.length;
   const choiceFeedback = feedback && current?.pathway !== "writing";
   const pathwayAverages = (["writing", "sound", "meaning"] as Pathway[]).map((pathway) => {
-    const values = HANZI.slice(0, progress.introduced).map(
-      (entry) => progress.characters[entry.character]?.[pathway] ?? 0,
-    );
+    const values = pathway === "writing"
+      ? HANZI.slice(0, progress.introduced).map((entry) => progress.characters[entry.character]?.writing ?? 0)
+      : Object.values(progress.words).map((entry) => entry[pathway]);
     return {
       pathway,
       percent: values.length
@@ -549,8 +626,8 @@ export default function Home() {
           <h1 id="progress-title">Even immortals keep score.</h1>
           <div className="progress-summary">
             <div><strong>{progress.introduced}</strong><span>characters challenged</span></div>
+            <div><strong>{Object.keys(progress.words).length}</strong><span>words encountered</span></div>
             <div><strong>{progress.sessions}</strong><span>chapters crossed</span></div>
-            <div><strong>{progress.totalPrompts}</strong><span>brush battles</span></div>
           </div>
           <div className="pathway-bars">
             {pathwayAverages.map(({ pathway, percent }) => (
@@ -564,7 +641,7 @@ export default function Home() {
           <div className="character-grid">
             {HANZI.map((entry, index) => {
               const score = progress.characters[entry.character];
-              const strength = score ? Math.round(((score.writing + score.sound + score.meaning) / 9) * 100) : 0;
+              const strength = score ? Math.round((score.writing / 3) * 100) : 0;
               return (
                 <div className={`character-tile ${index >= progress.introduced ? "locked" : ""}`} key={entry.character}>
                   <span>{index < progress.introduced ? entry.character : "·"}</span>
@@ -594,7 +671,7 @@ export default function Home() {
           <button className="primary-button" onClick={begin}>Cause more trouble</button>
           <button className="secondary-button" onClick={() => setShowProgress(true)}>Read the journey log</button>
         </section>
-      ) : item && current ? (
+      ) : current && (item || word) ? (
         <section className="practice-view">
           <div className="session-progress" aria-label={`Prompt ${step + 1} of ${session.length}`}><span style={{ width: `${((step + 1) / session.length) * 100}%` }} /></div>
           <div className="prompt-heading">
@@ -602,7 +679,7 @@ export default function Home() {
             <span className="step-count">{step + 1} / {session.length}</span>
           </div>
 
-          {current.pathway === "writing" ? (
+          {current.pathway === "writing" && item ? (
             <div className="writing-prompt">
               <div className="character-meta">
                 <span className="pinyin">{item.pinyin}</span>
@@ -658,7 +735,7 @@ export default function Home() {
                 </div>
               </div>
             </div>
-          ) : current.pathway === "sound" ? (
+          ) : current.pathway === "sound" && word ? (
             <div className="choice-prompt">
               <p className="question">Which word do you hear?</p>
               <button className="sound-button" onClick={speak} aria-label="Play sound"><Volume2 /><span>Hear the spell</span></button>
@@ -666,26 +743,25 @@ export default function Home() {
                 {options.map((option) => <button className={option.length > 1 ? "word-option" : ""} key={option} onClick={() => respond(option)} disabled={feedback !== null}>{option}</button>)}
               </div>
             </div>
-          ) : (
+          ) : word ? (
             <div className="choice-prompt">
-              <div className="display-character">{item.contextWord}</div>
+              <div className="display-character">{word.word}</div>
               <div className="meaning-pronunciation">
-                <span className="pinyin">{item.contextPinyin}</span>
-                {tone && item.contextWord === item.character && <span className="tone-chip"><strong>{tone.name}</strong> · {tone.shape}</span>}
-                <button className="pronunciation-button meaning-sound" onClick={speak} aria-label={`Hear ${item.contextWord} again`}><Volume2 /><span>Hear again</span></button>
+                <span className="pinyin">{word.syllables.join(" ")}</span>
+                <button className="pronunciation-button meaning-sound" onClick={speak} aria-label={`Hear ${word.word} again`}><Volume2 /><span>Hear again</span></button>
               </div>
               <p className="question">What does this word mean?</p>
               <div className="choice-grid meanings">
                 {options.map((option) => <button key={option} onClick={() => respond(option)} disabled={feedback !== null}>{option}</button>)}
               </div>
             </div>
-          )}
+          ) : null}
 
-          {choiceFeedback && (
+          {choiceFeedback && word && (
             <div className={`answer-panel ${feedback}`} role="status">
               <div>
-                <strong>{feedback === "correct" ? "Great Sage!" : `${item.contextWord} means ${item.contextMeaning}.`}</strong>
-                <span>{item.contextPinyin} · {item.contextMeaning}</span>
+                <strong>{feedback === "correct" ? "Great Sage!" : `${word.word} means ${word.meaning}.`}</strong>
+                <span>{word.syllables.join(" ")} · {word.meaning}</span>
               </div>
               <button onClick={advance}>Onward west</button>
             </div>

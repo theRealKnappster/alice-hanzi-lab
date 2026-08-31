@@ -1,0 +1,1672 @@
+[
+  {
+    "word": "吧",
+    "syllables": [
+      "ba"
+    ],
+    "tones": [
+      5
+    ],
+    "meaning": "suggestion particle"
+  },
+  {
+    "word": "白",
+    "syllables": [
+      "bái"
+    ],
+    "tones": [
+      2
+    ],
+    "meaning": "white"
+  },
+  {
+    "word": "百",
+    "syllables": [
+      "bǎi"
+    ],
+    "tones": [
+      3
+    ],
+    "meaning": "hundred"
+  },
+  {
+    "word": "帮助",
+    "syllables": [
+      "bāng",
+      "zhù"
+    ],
+    "tones": [
+      1,
+      4
+    ],
+    "meaning": "help"
+  },
+  {
+    "word": "报纸",
+    "syllables": [
+      "bào",
+      "zhǐ"
+    ],
+    "tones": [
+      4,
+      3
+    ],
+    "meaning": "newspaper"
+  },
+  {
+    "word": "比",
+    "syllables": [
+      "bǐ"
+    ],
+    "tones": [
+      3
+    ],
+    "meaning": "compare"
+  },
+  {
+    "word": "便宜",
+    "syllables": [
+      "pián",
+      "yi"
+    ],
+    "tones": [
+      2,
+      5
+    ],
+    "meaning": "cheap"
+  },
+  {
+    "word": "别",
+    "syllables": [
+      "bié"
+    ],
+    "tones": [
+      2
+    ],
+    "meaning": "do not"
+  },
+  {
+    "word": "长",
+    "syllables": [
+      "cháng"
+    ],
+    "tones": [
+      2
+    ],
+    "meaning": "long"
+  },
+  {
+    "word": "唱歌",
+    "syllables": [
+      "chàng",
+      "gē"
+    ],
+    "tones": [
+      4,
+      1
+    ],
+    "meaning": "sing (a song)"
+  },
+  {
+    "word": "出",
+    "syllables": [
+      "chū"
+    ],
+    "tones": [
+      1
+    ],
+    "meaning": "go out"
+  },
+  {
+    "word": "穿",
+    "syllables": [
+      "chuān"
+    ],
+    "tones": [
+      1
+    ],
+    "meaning": "to wear"
+  },
+  {
+    "word": "船",
+    "syllables": [
+      "chuán"
+    ],
+    "tones": [
+      2
+    ],
+    "meaning": "boat"
+  },
+  {
+    "word": "次",
+    "syllables": [
+      "cì"
+    ],
+    "tones": [
+      4
+    ],
+    "meaning": "time; occurrence classifier"
+  },
+  {
+    "word": "从",
+    "syllables": [
+      "cóng"
+    ],
+    "tones": [
+      2
+    ],
+    "meaning": "from"
+  },
+  {
+    "word": "错",
+    "syllables": [
+      "cuò"
+    ],
+    "tones": [
+      4
+    ],
+    "meaning": "mistake"
+  },
+  {
+    "word": "打篮球",
+    "syllables": [
+      "dǎ",
+      "lán",
+      "qiú"
+    ],
+    "tones": [
+      3,
+      2,
+      2
+    ],
+    "meaning": "play basketball"
+  },
+  {
+    "word": "大家",
+    "syllables": [
+      "dà",
+      "jiā"
+    ],
+    "tones": [
+      4,
+      1
+    ],
+    "meaning": "everyone"
+  },
+  {
+    "word": "但是",
+    "syllables": [
+      "dàn",
+      "shì"
+    ],
+    "tones": [
+      4,
+      4
+    ],
+    "meaning": "but"
+  },
+  {
+    "word": "到",
+    "syllables": [
+      "dào"
+    ],
+    "tones": [
+      4
+    ],
+    "meaning": "arrive (at a place)"
+  },
+  {
+    "word": "得",
+    "syllables": [
+      "de"
+    ],
+    "tones": [
+      5
+    ],
+    "meaning": "(complement particle)"
+  },
+  {
+    "word": "等",
+    "syllables": [
+      "děng"
+    ],
+    "tones": [
+      3
+    ],
+    "meaning": "to wait"
+  },
+  {
+    "word": "弟弟",
+    "syllables": [
+      "dì",
+      "di"
+    ],
+    "tones": [
+      4,
+      5
+    ],
+    "meaning": "younger brother"
+  },
+  {
+    "word": "第一",
+    "syllables": [
+      "dì",
+      "yī"
+    ],
+    "tones": [
+      4,
+      1
+    ],
+    "meaning": "first"
+  },
+  {
+    "word": "懂",
+    "syllables": [
+      "dǒng"
+    ],
+    "tones": [
+      3
+    ],
+    "meaning": "understand"
+  },
+  {
+    "word": "对",
+    "syllables": [
+      "duì"
+    ],
+    "tones": [
+      4
+    ],
+    "meaning": "correct / toward"
+  },
+  {
+    "word": "房间",
+    "syllables": [
+      "fáng",
+      "jiān"
+    ],
+    "tones": [
+      2,
+      1
+    ],
+    "meaning": "room"
+  },
+  {
+    "word": "非常",
+    "syllables": [
+      "fēi",
+      "cháng"
+    ],
+    "tones": [
+      1,
+      2
+    ],
+    "meaning": "extremely"
+  },
+  {
+    "word": "服务员",
+    "syllables": [
+      "fú",
+      "wù",
+      "yuán"
+    ],
+    "tones": [
+      2,
+      4,
+      2
+    ],
+    "meaning": "server / attendant"
+  },
+  {
+    "word": "高",
+    "syllables": [
+      "gāo"
+    ],
+    "tones": [
+      1
+    ],
+    "meaning": "high"
+  },
+  {
+    "word": "告诉",
+    "syllables": [
+      "gào",
+      "su"
+    ],
+    "tones": [
+      4,
+      5
+    ],
+    "meaning": "to tell"
+  },
+  {
+    "word": "哥哥",
+    "syllables": [
+      "gē",
+      "ge"
+    ],
+    "tones": [
+      1,
+      5
+    ],
+    "meaning": "older brother"
+  },
+  {
+    "word": "给",
+    "syllables": [
+      "gěi"
+    ],
+    "tones": [
+      3
+    ],
+    "meaning": "to give / for"
+  },
+  {
+    "word": "公共汽车",
+    "syllables": [
+      "gōng",
+      "gòng",
+      "qì",
+      "chē"
+    ],
+    "tones": [
+      1,
+      4,
+      4,
+      1
+    ],
+    "meaning": "bus"
+  },
+  {
+    "word": "公斤",
+    "syllables": [
+      "gōng",
+      "jīn"
+    ],
+    "tones": [
+      1,
+      1
+    ],
+    "meaning": "kilogram"
+  },
+  {
+    "word": "公司",
+    "syllables": [
+      "gōng",
+      "sī"
+    ],
+    "tones": [
+      1,
+      1
+    ],
+    "meaning": "company"
+  },
+  {
+    "word": "贵",
+    "syllables": [
+      "guì"
+    ],
+    "tones": [
+      4
+    ],
+    "meaning": "expensive"
+  },
+  {
+    "word": "过",
+    "syllables": [
+      "guo"
+    ],
+    "tones": [
+      5
+    ],
+    "meaning": "experienced-action particle"
+  },
+  {
+    "word": "孩子",
+    "syllables": [
+      "hái",
+      "zi"
+    ],
+    "tones": [
+      2,
+      5
+    ],
+    "meaning": "child"
+  },
+  {
+    "word": "好吃",
+    "syllables": [
+      "hǎo",
+      "chī"
+    ],
+    "tones": [
+      3,
+      1
+    ],
+    "meaning": "tasty"
+  },
+  {
+    "word": "号",
+    "syllables": [
+      "hào"
+    ],
+    "tones": [
+      4
+    ],
+    "meaning": "number / date"
+  },
+  {
+    "word": "黑",
+    "syllables": [
+      "hēi"
+    ],
+    "tones": [
+      1
+    ],
+    "meaning": "black"
+  },
+  {
+    "word": "红",
+    "syllables": [
+      "hóng"
+    ],
+    "tones": [
+      2
+    ],
+    "meaning": "red"
+  },
+  {
+    "word": "欢迎",
+    "syllables": [
+      "huān",
+      "yíng"
+    ],
+    "tones": [
+      1,
+      2
+    ],
+    "meaning": "welcome"
+  },
+  {
+    "word": "还",
+    "syllables": [
+      "hái"
+    ],
+    "tones": [
+      2
+    ],
+    "meaning": "still"
+  },
+  {
+    "word": "回答",
+    "syllables": [
+      "huí",
+      "dá"
+    ],
+    "tones": [
+      2,
+      2
+    ],
+    "meaning": "to answer"
+  },
+  {
+    "word": "机场",
+    "syllables": [
+      "jī",
+      "chǎng"
+    ],
+    "tones": [
+      1,
+      3
+    ],
+    "meaning": "airport"
+  },
+  {
+    "word": "鸡蛋",
+    "syllables": [
+      "jī",
+      "dàn"
+    ],
+    "tones": [
+      1,
+      4
+    ],
+    "meaning": "egg"
+  },
+  {
+    "word": "件",
+    "syllables": [
+      "jiàn"
+    ],
+    "tones": [
+      4
+    ],
+    "meaning": "classifier for items and clothing"
+  },
+  {
+    "word": "教室",
+    "syllables": [
+      "jiào",
+      "shì"
+    ],
+    "tones": [
+      4,
+      4
+    ],
+    "meaning": "classroom"
+  },
+  {
+    "word": "姐姐",
+    "syllables": [
+      "jiě",
+      "jie"
+    ],
+    "tones": [
+      3,
+      5
+    ],
+    "meaning": "older sister"
+  },
+  {
+    "word": "介绍",
+    "syllables": [
+      "jiè",
+      "shào"
+    ],
+    "tones": [
+      4,
+      4
+    ],
+    "meaning": "to introduce"
+  },
+  {
+    "word": "近",
+    "syllables": [
+      "jìn"
+    ],
+    "tones": [
+      4
+    ],
+    "meaning": "near"
+  },
+  {
+    "word": "进",
+    "syllables": [
+      "jìn"
+    ],
+    "tones": [
+      4
+    ],
+    "meaning": "to enter"
+  },
+  {
+    "word": "就",
+    "syllables": [
+      "jiù"
+    ],
+    "tones": [
+      4
+    ],
+    "meaning": "then"
+  },
+  {
+    "word": "觉得",
+    "syllables": [
+      "jué",
+      "de"
+    ],
+    "tones": [
+      2,
+      5
+    ],
+    "meaning": "to feel / think"
+  },
+  {
+    "word": "咖啡",
+    "syllables": [
+      "kā",
+      "fēi"
+    ],
+    "tones": [
+      1,
+      1
+    ],
+    "meaning": "coffee"
+  },
+  {
+    "word": "开始",
+    "syllables": [
+      "kāi",
+      "shǐ"
+    ],
+    "tones": [
+      1,
+      3
+    ],
+    "meaning": "begin"
+  },
+  {
+    "word": "考试",
+    "syllables": [
+      "kǎo",
+      "shì"
+    ],
+    "tones": [
+      3,
+      4
+    ],
+    "meaning": "test"
+  },
+  {
+    "word": "可能",
+    "syllables": [
+      "kě",
+      "néng"
+    ],
+    "tones": [
+      3,
+      2
+    ],
+    "meaning": "possible / maybe"
+  },
+  {
+    "word": "可以",
+    "syllables": [
+      "kě",
+      "yǐ"
+    ],
+    "tones": [
+      3,
+      3
+    ],
+    "meaning": "can / may"
+  },
+  {
+    "word": "课",
+    "syllables": [
+      "kè"
+    ],
+    "tones": [
+      4
+    ],
+    "meaning": "class"
+  },
+  {
+    "word": "快",
+    "syllables": [
+      "kuài"
+    ],
+    "tones": [
+      4
+    ],
+    "meaning": "fast"
+  },
+  {
+    "word": "快乐",
+    "syllables": [
+      "kuài",
+      "lè"
+    ],
+    "tones": [
+      4,
+      4
+    ],
+    "meaning": "happy"
+  },
+  {
+    "word": "累",
+    "syllables": [
+      "lèi"
+    ],
+    "tones": [
+      4
+    ],
+    "meaning": "tired"
+  },
+  {
+    "word": "离",
+    "syllables": [
+      "lí"
+    ],
+    "tones": [
+      2
+    ],
+    "meaning": "away from"
+  },
+  {
+    "word": "两",
+    "syllables": [
+      "liǎng"
+    ],
+    "tones": [
+      3
+    ],
+    "meaning": "two"
+  },
+  {
+    "word": "路",
+    "syllables": [
+      "lù"
+    ],
+    "tones": [
+      4
+    ],
+    "meaning": "road"
+  },
+  {
+    "word": "旅游",
+    "syllables": [
+      "lǚ",
+      "yóu"
+    ],
+    "tones": [
+      3,
+      2
+    ],
+    "meaning": "to travel"
+  },
+  {
+    "word": "卖",
+    "syllables": [
+      "mài"
+    ],
+    "tones": [
+      4
+    ],
+    "meaning": "to sell"
+  },
+  {
+    "word": "慢",
+    "syllables": [
+      "màn"
+    ],
+    "tones": [
+      4
+    ],
+    "meaning": "slow"
+  },
+  {
+    "word": "忙",
+    "syllables": [
+      "máng"
+    ],
+    "tones": [
+      2
+    ],
+    "meaning": "busy"
+  },
+  {
+    "word": "每",
+    "syllables": [
+      "měi"
+    ],
+    "tones": [
+      3
+    ],
+    "meaning": "each"
+  },
+  {
+    "word": "妹妹",
+    "syllables": [
+      "mèi",
+      "mei"
+    ],
+    "tones": [
+      4,
+      5
+    ],
+    "meaning": "younger sister"
+  },
+  {
+    "word": "门",
+    "syllables": [
+      "mén"
+    ],
+    "tones": [
+      2
+    ],
+    "meaning": "door"
+  },
+  {
+    "word": "男人",
+    "syllables": [
+      "nán",
+      "rén"
+    ],
+    "tones": [
+      2,
+      2
+    ],
+    "meaning": "man"
+  },
+  {
+    "word": "您",
+    "syllables": [
+      "nín"
+    ],
+    "tones": [
+      2
+    ],
+    "meaning": "you (polite)"
+  },
+  {
+    "word": "牛奶",
+    "syllables": [
+      "niú",
+      "nǎi"
+    ],
+    "tones": [
+      2,
+      3
+    ],
+    "meaning": "milk"
+  },
+  {
+    "word": "女人",
+    "syllables": [
+      "nǚ",
+      "rén"
+    ],
+    "tones": [
+      3,
+      2
+    ],
+    "meaning": "woman"
+  },
+  {
+    "word": "旁边",
+    "syllables": [
+      "páng",
+      "biān"
+    ],
+    "tones": [
+      2,
+      1
+    ],
+    "meaning": "beside / next to"
+  },
+  {
+    "word": "跑步",
+    "syllables": [
+      "pǎo",
+      "bù"
+    ],
+    "tones": [
+      3,
+      4
+    ],
+    "meaning": "to run"
+  },
+  {
+    "word": "票",
+    "syllables": [
+      "piào"
+    ],
+    "tones": [
+      4
+    ],
+    "meaning": "ticket"
+  },
+  {
+    "word": "妻子",
+    "syllables": [
+      "qī",
+      "zi"
+    ],
+    "tones": [
+      1,
+      5
+    ],
+    "meaning": "wife"
+  },
+  {
+    "word": "起床",
+    "syllables": [
+      "qǐ",
+      "chuáng"
+    ],
+    "tones": [
+      3,
+      2
+    ],
+    "meaning": "get out of bed"
+  },
+  {
+    "word": "千",
+    "syllables": [
+      "qiān"
+    ],
+    "tones": [
+      1
+    ],
+    "meaning": "one thousand"
+  },
+  {
+    "word": "晴",
+    "syllables": [
+      "qíng"
+    ],
+    "tones": [
+      2
+    ],
+    "meaning": "clear"
+  },
+  {
+    "word": "去年",
+    "syllables": [
+      "qù",
+      "nián"
+    ],
+    "tones": [
+      4,
+      2
+    ],
+    "meaning": "last year"
+  },
+  {
+    "word": "让",
+    "syllables": [
+      "ràng"
+    ],
+    "tones": [
+      4
+    ],
+    "meaning": "to let / allow"
+  },
+  {
+    "word": "上班",
+    "syllables": [
+      "shàng",
+      "bān"
+    ],
+    "tones": [
+      4,
+      1
+    ],
+    "meaning": "go to work"
+  },
+  {
+    "word": "身体",
+    "syllables": [
+      "shēn",
+      "tǐ"
+    ],
+    "tones": [
+      1,
+      3
+    ],
+    "meaning": "body / health"
+  },
+  {
+    "word": "生病",
+    "syllables": [
+      "shēng",
+      "bìng"
+    ],
+    "tones": [
+      1,
+      4
+    ],
+    "meaning": "get sick"
+  },
+  {
+    "word": "生日",
+    "syllables": [
+      "shēng",
+      "rì"
+    ],
+    "tones": [
+      1,
+      4
+    ],
+    "meaning": "birthday"
+  },
+  {
+    "word": "时间",
+    "syllables": [
+      "shí",
+      "jiān"
+    ],
+    "tones": [
+      2,
+      1
+    ],
+    "meaning": "time"
+  },
+  {
+    "word": "事情",
+    "syllables": [
+      "shì",
+      "qing"
+    ],
+    "tones": [
+      4,
+      5
+    ],
+    "meaning": "matter"
+  },
+  {
+    "word": "手表",
+    "syllables": [
+      "shǒu",
+      "biǎo"
+    ],
+    "tones": [
+      3,
+      3
+    ],
+    "meaning": "wristwatch"
+  },
+  {
+    "word": "手机",
+    "syllables": [
+      "shǒu",
+      "jī"
+    ],
+    "tones": [
+      3,
+      1
+    ],
+    "meaning": "mobile (cell) phone"
+  },
+  {
+    "word": "送",
+    "syllables": [
+      "sòng"
+    ],
+    "tones": [
+      4
+    ],
+    "meaning": "to give / deliver"
+  },
+  {
+    "word": "所以",
+    "syllables": [
+      "suǒ",
+      "yǐ"
+    ],
+    "tones": [
+      3,
+      3
+    ],
+    "meaning": "so"
+  },
+  {
+    "word": "它",
+    "syllables": [
+      "tā"
+    ],
+    "tones": [
+      1
+    ],
+    "meaning": "it"
+  },
+  {
+    "word": "踢足球",
+    "syllables": [
+      "tī",
+      "zú",
+      "qiú"
+    ],
+    "tones": [
+      1,
+      2,
+      2
+    ],
+    "meaning": "to play soccer"
+  },
+  {
+    "word": "题",
+    "syllables": [
+      "tí"
+    ],
+    "tones": [
+      2
+    ],
+    "meaning": "question / problem"
+  },
+  {
+    "word": "跳舞",
+    "syllables": [
+      "tiào",
+      "wǔ"
+    ],
+    "tones": [
+      4,
+      3
+    ],
+    "meaning": "to dance"
+  },
+  {
+    "word": "外",
+    "syllables": [
+      "wài"
+    ],
+    "tones": [
+      4
+    ],
+    "meaning": "outside"
+  },
+  {
+    "word": "完",
+    "syllables": [
+      "wán"
+    ],
+    "tones": [
+      2
+    ],
+    "meaning": "to finish"
+  },
+  {
+    "word": "玩",
+    "syllables": [
+      "wán"
+    ],
+    "tones": [
+      2
+    ],
+    "meaning": "to play"
+  },
+  {
+    "word": "晚上",
+    "syllables": [
+      "wǎn",
+      "shang"
+    ],
+    "tones": [
+      3,
+      5
+    ],
+    "meaning": "evening"
+  },
+  {
+    "word": "为什么",
+    "syllables": [
+      "wèi",
+      "shén",
+      "me"
+    ],
+    "tones": [
+      4,
+      2,
+      5
+    ],
+    "meaning": "why"
+  },
+  {
+    "word": "问",
+    "syllables": [
+      "wèn"
+    ],
+    "tones": [
+      4
+    ],
+    "meaning": "ask"
+  },
+  {
+    "word": "问题",
+    "syllables": [
+      "wèn",
+      "tí"
+    ],
+    "tones": [
+      4,
+      2
+    ],
+    "meaning": "question"
+  },
+  {
+    "word": "西瓜",
+    "syllables": [
+      "xī",
+      "guā"
+    ],
+    "tones": [
+      1,
+      1
+    ],
+    "meaning": "watermelon"
+  },
+  {
+    "word": "希望",
+    "syllables": [
+      "xī",
+      "wàng"
+    ],
+    "tones": [
+      1,
+      4
+    ],
+    "meaning": "to hope"
+  },
+  {
+    "word": "洗",
+    "syllables": [
+      "xǐ"
+    ],
+    "tones": [
+      3
+    ],
+    "meaning": "to wash"
+  },
+  {
+    "word": "向",
+    "syllables": [
+      "xiàng"
+    ],
+    "tones": [
+      4
+    ],
+    "meaning": "toward"
+  },
+  {
+    "word": "小时",
+    "syllables": [
+      "xiǎo",
+      "shí"
+    ],
+    "tones": [
+      3,
+      2
+    ],
+    "meaning": "hour"
+  },
+  {
+    "word": "笑",
+    "syllables": [
+      "xiào"
+    ],
+    "tones": [
+      4
+    ],
+    "meaning": "to laugh"
+  },
+  {
+    "word": "新",
+    "syllables": [
+      "xīn"
+    ],
+    "tones": [
+      1
+    ],
+    "meaning": "new"
+  },
+  {
+    "word": "姓",
+    "syllables": [
+      "xìng"
+    ],
+    "tones": [
+      4
+    ],
+    "meaning": "surname"
+  },
+  {
+    "word": "休息",
+    "syllables": [
+      "xiū",
+      "xi"
+    ],
+    "tones": [
+      1,
+      5
+    ],
+    "meaning": "to rest"
+  },
+  {
+    "word": "雪",
+    "syllables": [
+      "xuě"
+    ],
+    "tones": [
+      3
+    ],
+    "meaning": "snow"
+  },
+  {
+    "word": "颜色",
+    "syllables": [
+      "yán",
+      "sè"
+    ],
+    "tones": [
+      2,
+      4
+    ],
+    "meaning": "color"
+  },
+  {
+    "word": "眼睛",
+    "syllables": [
+      "yǎn",
+      "jing"
+    ],
+    "tones": [
+      3,
+      5
+    ],
+    "meaning": "eye"
+  },
+  {
+    "word": "羊肉",
+    "syllables": [
+      "yáng",
+      "ròu"
+    ],
+    "tones": [
+      2,
+      4
+    ],
+    "meaning": "mutton"
+  },
+  {
+    "word": "药",
+    "syllables": [
+      "yào"
+    ],
+    "tones": [
+      4
+    ],
+    "meaning": "medicine"
+  },
+  {
+    "word": "要",
+    "syllables": [
+      "yào"
+    ],
+    "tones": [
+      4
+    ],
+    "meaning": "to want"
+  },
+  {
+    "word": "也",
+    "syllables": [
+      "yě"
+    ],
+    "tones": [
+      3
+    ],
+    "meaning": "also"
+  },
+  {
+    "word": "一起",
+    "syllables": [
+      "yī",
+      "qǐ"
+    ],
+    "tones": [
+      1,
+      3
+    ],
+    "meaning": "together"
+  },
+  {
+    "word": "已经",
+    "syllables": [
+      "yǐ",
+      "jīng"
+    ],
+    "tones": [
+      3,
+      1
+    ],
+    "meaning": "already"
+  },
+  {
+    "word": "意思",
+    "syllables": [
+      "yì",
+      "si"
+    ],
+    "tones": [
+      4,
+      5
+    ],
+    "meaning": "meaning"
+  },
+  {
+    "word": "因为",
+    "syllables": [
+      "yīn",
+      "wèi"
+    ],
+    "tones": [
+      1,
+      4
+    ],
+    "meaning": "because"
+  },
+  {
+    "word": "阴",
+    "syllables": [
+      "yīn"
+    ],
+    "tones": [
+      1
+    ],
+    "meaning": "cloudy (weather)"
+  },
+  {
+    "word": "游泳",
+    "syllables": [
+      "yóu",
+      "yǒng"
+    ],
+    "tones": [
+      2,
+      3
+    ],
+    "meaning": "to swim"
+  },
+  {
+    "word": "右边",
+    "syllables": [
+      "yòu",
+      "bian"
+    ],
+    "tones": [
+      4,
+      5
+    ],
+    "meaning": "right side"
+  },
+  {
+    "word": "鱼",
+    "syllables": [
+      "yú"
+    ],
+    "tones": [
+      2
+    ],
+    "meaning": "fish"
+  },
+  {
+    "word": "元",
+    "syllables": [
+      "yuán"
+    ],
+    "tones": [
+      2
+    ],
+    "meaning": "yuan / currency unit"
+  },
+  {
+    "word": "远",
+    "syllables": [
+      "yuǎn"
+    ],
+    "tones": [
+      3
+    ],
+    "meaning": "far"
+  },
+  {
+    "word": "运动",
+    "syllables": [
+      "yùn",
+      "dòng"
+    ],
+    "tones": [
+      4,
+      4
+    ],
+    "meaning": "exercise / sport"
+  },
+  {
+    "word": "再",
+    "syllables": [
+      "zài"
+    ],
+    "tones": [
+      4
+    ],
+    "meaning": "again"
+  },
+  {
+    "word": "早上",
+    "syllables": [
+      "zǎo",
+      "shang"
+    ],
+    "tones": [
+      3,
+      5
+    ],
+    "meaning": "(early) morning"
+  },
+  {
+    "word": "张",
+    "syllables": [
+      "zhāng"
+    ],
+    "tones": [
+      1
+    ],
+    "meaning": "classifier for flat objects"
+  },
+  {
+    "word": "丈夫",
+    "syllables": [
+      "zhàng",
+      "fu"
+    ],
+    "tones": [
+      4,
+      5
+    ],
+    "meaning": "husband"
+  },
+  {
+    "word": "找",
+    "syllables": [
+      "zhǎo"
+    ],
+    "tones": [
+      3
+    ],
+    "meaning": "to look for"
+  },
+  {
+    "word": "真",
+    "syllables": [
+      "zhēn"
+    ],
+    "tones": [
+      1
+    ],
+    "meaning": "real"
+  },
+  {
+    "word": "正在",
+    "syllables": [
+      "zhèng",
+      "zài"
+    ],
+    "tones": [
+      4,
+      4
+    ],
+    "meaning": "in the process of (doing something)"
+  },
+  {
+    "word": "知道",
+    "syllables": [
+      "zhī",
+      "dào"
+    ],
+    "tones": [
+      1,
+      4
+    ],
+    "meaning": "know"
+  },
+  {
+    "word": "准备",
+    "syllables": [
+      "zhǔn",
+      "bèi"
+    ],
+    "tones": [
+      3,
+      4
+    ],
+    "meaning": "prepare"
+  },
+  {
+    "word": "着",
+    "syllables": [
+      "zhe"
+    ],
+    "tones": [
+      5
+    ],
+    "meaning": "ongoing-action particle"
+  },
+  {
+    "word": "自行车",
+    "syllables": [
+      "zì",
+      "xíng",
+      "chē"
+    ],
+    "tones": [
+      4,
+      2,
+      1
+    ],
+    "meaning": "bicycle"
+  },
+  {
+    "word": "走",
+    "syllables": [
+      "zǒu"
+    ],
+    "tones": [
+      3
+    ],
+    "meaning": "to walk"
+  },
+  {
+    "word": "最",
+    "syllables": [
+      "zuì"
+    ],
+    "tones": [
+      4
+    ],
+    "meaning": "the most"
+  },
+  {
+    "word": "左边",
+    "syllables": [
+      "zuǒ",
+      "bian"
+    ],
+    "tones": [
+      3,
+      5
+    ],
+    "meaning": "the left side"
+  }
+]
